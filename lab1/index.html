@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Lab1</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
+	</head>
+	<body>
+		<div id="menu">
+			<ul>
+				<li onclick="activateWorkbookOne();">Workbook 1</li>
+				<li onclick="activateWorkbookTwo();">Workbook 2</li>
+			</ul>
+		</div>
+
+		<section id="section1">
+			<h1>Image Matching Workbook</h1>
+			<h3>Click to match two identical racoons!</h3>
+			<table>
+				<tr>
+					<td class="column">
+						<ol>
+							<li><img class="cartoon" src="img/racoon1.png"/></li>
+							<li><img class="cartoon" src="img/racoon2.png"/></li>
+							<li><img class="cartoon" src="img/racoon3.png"/></li>
+							<li><img class="cartoon" src="img/racoon4.png"/></li>
+						</ol>
+					</td>
+					<td><ul></ul></td>
+					<td><ul></ul></td>
+					<td class="column">
+						<ul>
+							<li><img class="cartoon" src="img/racoon2.png"/></li>
+							<li><img class="cartoon" src="img/racoon3.png"/></li>
+							<li><img class="cartoon" src="img/racoon1.png"/></li>
+							<li><img class="cartoon" src="img/racoon4.png"/></li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</section>
+
+		<section id="section2">
+			<h1>Image Matching Workbook</h1>
+			<h3>Click to match racoons with its own silhouette!</h3>
+			<table>
+				<tr>
+					<td class="column">
+						<ol>
+							<li><img class="cartoon" src="img/racoon5.png"/></li>
+							<li><img class="cartoon" src="img/racoon4.png"/></li>
+							<li><img class="cartoon" src="img/racoon2.png"/></li>
+							<li><img class="cartoon" src="img/racoon6.png"/></li>
+						</ol>
+					</td>
+					<td><ul></ul></td>
+					<td><ul></ul></td>
+					<td class="column">
+						<ul>
+							<li><img class="cartoon" src="img/racoon4shadow.png"/></li>
+							<li><img class="cartoon" src="img/racoon6shadow.png"/></li>
+							<li><img class="cartoon" src="img/racoon5shadow.png"/></li>
+							<li><img class="cartoon" src="img/racoon2shadow.png"/></li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</section>
+		<p>Cartoons are designed by <a href="http://www.vecteezy.com/vector-art/86958-cartoon-raccoon-set-vector">Vecteezy</a></p>
+	</body>
+	<script src="js/control.js"></script>
+</html>
