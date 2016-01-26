@@ -1,28 +1,19 @@
 function activateWorksheetOne() {
-	document.getElementById("section1").style.visibility = "visible";
-	document.getElementById("section1").style.display = "";
-	document.getElementById("section2").style.visibility = "hidden";
-	document.getElementById("section2").style.display = "none";
-	document.getElementById("section3").style.visibility = "hidden";
-	document.getElementById("section3").style.display = "none";
+	$("#section1").show();
+	$("#section2").hide();
+	$("#section3").hide();
 }
 
 function activateWorksheetTwo() {
-	document.getElementById("section1").style.visibility = "hidden";
-	document.getElementById("section1").style.display = "none";
-	document.getElementById("section2").style.visibility = "visible";
-	document.getElementById("section2").style.display = "";
-	document.getElementById("section3").style.visibility = "hidden";
-	document.getElementById("section3").style.display = "none";
+	$("#section1").hide();
+	$("#section2").show();
+	$("#section3").hide();
 }
 
 function activateWorksheetThree() {
-	document.getElementById("section1").style.visibility = "hidden";
-	document.getElementById("section1").style.display = "none";
-	document.getElementById("section2").style.visibility = "hidden";
-	document.getElementById("section2").style.display = "none";
-	document.getElementById("section3").style.visibility = "visible";
-	document.getElementById("section3").style.display = "";
+	$("#section1").hide();
+	$("#section2").hide();
+	$("#section3").show();
 }
 
 activateWorksheetOne();
