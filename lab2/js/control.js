@@ -1,7 +1,8 @@
-
-var filename = ["raccoon1.png", "raccoon2.png", "raccoon3.png", "raccoon4.png",
-"raccoon5.png", "raccoon6.png", "raccoon7.png", "raccoon8.png", "raccoon9.png",
-"raccoon10.png", "raccoon11.png", "raccoon12.png"];
+var numberOfImages = 0;
+var correctImages = 0;
+var filename = ["raccoon1", "raccoon2", "raccoon3", "raccoon4",
+"raccoon5", "raccoon6", "raccoon7", "raccoon8", "raccoon9",
+"raccoon10", "raccoon11", "raccoon12"];
 
 $("#main").hide()
 
@@ -18,6 +19,9 @@ function generateWorksheet() {
 		return;
 	}
 
+	correctImages = 0;
+	numberOfImages = n;
+
 	$('#ulLeft').empty();
 	$('#ulRight').empty();
 
@@ -32,12 +36,13 @@ function generateWorksheet() {
 	shuffle(rightFilename);
 
 	for(var i=0;i<n;i++){
-		$('#ulLeft').append('<li><img class="cartoon" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '"  onClick="onClickLeft(\''+ leftFilename[i] + '\')"/></li>');
-		$('#ulRight').append('<li><img class="cartoon" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '"  onClick="onClickRight(\'' + rightFilename[i] + '\')"/></li>');
+		$('#ulLeft').append('<li><img class="cartoon" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\')"/></li>');
+		$('#ulRight').append('<li><img class="cartoon" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '.png"  onClick="onClickRight(\'' + rightFilename[i] + '\')"/></li>');
 	}
 
 	$('#generate').hide();
 	$('#main').show();
+	$('#mainMsg').html('Select an image to start.');
 }
 
 var leftSelected = false;
@@ -49,18 +54,31 @@ function onClickLeft(imageName) {
 		leftSelected = true;
 		selectedFilename = imageName;
 		$('#mainMsg').html('Select an image from the right column.');
+		$('#left'+selectedFilename).addClass('leftSelected');
 		return;
 	}
 
+	// If correct
 	if (imageName == selectedFilename) {
 		$('#mainMsg').html('Correct match.');
+		$('#left'+imageName).addClass('leftSelected correctSelected');
+		$('#right'+selectedFilename).addClass('correctSelected');
+
+		$('#left'+imageName).attr('onClick','');
+		$('#right'+selectedFilename).attr('onClick','');
+
+		correctImages += 1;
+		if (correctImages == numberOfImages) {
+			finishedWorksheet();
+		}
 	}
 	else {
 		$('#mainMsg').html('Wrong match.');
-	}
+		$('#right'+selectedFilename).removeClass('wrongSelected rightSelected');
 
-	leftSelected = false;
-	rightSelected = false;
+		rightSelected = false;
+		selectedFilename = "";
+	}
 }
 
 function onClickRight(imageName) {
@@ -68,16 +86,36 @@ function onClickRight(imageName) {
 		rightSelected = true;
 		selectedFilename = imageName;
 		$('#mainMsg').html('Select an image from the left column.');
+		$('#right'+selectedFilename).addClass('rightSelected');
 		return;
 	}
 
+	// If correct
 	if (imageName == selectedFilename) {
 		$('#mainMsg').html('Correct match.');
+		$('#right'+imageName).addClass('rightSelected correctSelected');
+		$('#left'+selectedFilename).addClass('correctSelected');
+
+		$('#right'+imageName).attr('onClick','');
+		$('#left'+selectedFilename).attr('onClick','');
+
+		correctImages += 1;
+		if (correctImages == numberOfImages) {
+			finishedWorksheet();
+		}
 	}
 	else {
 		$('#mainMsg').html('Wrong match.');
+		$('#left'+selectedFilename).removeClass('leftSelected');
+
+		leftSelected = false;
+		selectedFilename = "";
 	}
 
 	leftSelected = false;
 	rightSelected = false;
+}
+
+function finishedWorksheet() {
+	$('#generate').show();
 }

@@ -36,15 +36,28 @@ img.cartoon {
 ul#ulLeft img.cartoon:hover {
 	transform: translate3d(50px, 0px, 0px);
 	transition: transform .2s ease-in-out;
-	background-color: #b37500;
+	background-color: #e69600;
 }
 
 ul#ulRight img.cartoon:hover {
 	transform: translate3d(-50px, 0px, 0px);
 	transition: transform .2s ease-in-out;
-	background-color: #b37500;
+	background-color: #e69600;
 }
 
+img.leftSelected {
+	transform: translate3d(50px, 0px, 0px);
+	background-color: #e69600;
+}
+
+img.rightSelected {
+	transform: translate3d(-50px, 0px, 0px);
+	background-color: #e69600;
+}
+
+img.correctSelected {
+	background-color: #739900;
+}
 
 legend {
 	display: block;
