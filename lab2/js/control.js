@@ -1,5 +1,9 @@
 var numberOfImages = 0;
 var correctImages = 0;
+var startTime;
+var numberOfClicks = 0;
+var numberOfWrongs = 0;
+var maxNumberOfWrongs = 0;
 var filename = ["raccoon1", "raccoon2", "raccoon3", "raccoon4",
 "raccoon5", "raccoon6", "raccoon7", "raccoon8", "raccoon9",
 "raccoon10", "raccoon11", "raccoon12"];
@@ -14,13 +18,16 @@ function shuffle(o){
 function generateWorksheet() {
 	var n = $('#numberOfImages').val();
 	if ((n < 2) || (n > 12)) {
-		$('#msg').html('Please enter a number between 2 and 12 !');
+		$('#msg').html('<p>Please enter a number between 2 and 12 !</p>');
 		$('#msg').css('color','red');
 		return;
 	}
 
 	correctImages = 0;
 	numberOfImages = n;
+	numberOfClicks = 0;
+	numberOfWrongs = 0;
+	maxNumberOfWrongs = n;
 
 	$('#ulLeft').empty();
 	$('#ulRight').empty();
@@ -43,6 +50,7 @@ function generateWorksheet() {
 	$('#generate').hide();
 	$('#main').show();
 	$('#mainMsg').html('Select an image to start.');
+	startTime = new Date().getTime();
 }
 
 var leftSelected = false;
@@ -50,6 +58,7 @@ var rightSelected = false;
 var selectedFilename = "";
 
 function onClickLeft(imageName) {
+	numberOfClicks++;
 	if (leftSelected) {
 		$('#left'+selectedFilename).removeClass('leftSelected');
 	}
@@ -76,8 +85,12 @@ function onClickLeft(imageName) {
 		}
 	}
 	else {
+		numberOfWrongs++;
 		$('#mainMsg').html('Wrong match.');
 		$('#right'+selectedFilename).removeClass('rightSelected');
+		if (numberOfWrongs >= maxNumberOfWrongs) {
+			failedWorksheet();
+		}
 	}
 
 	leftSelected = "";
@@ -86,6 +99,7 @@ function onClickLeft(imageName) {
 }
 
 function onClickRight(imageName) {
+	numberOfClicks++;
 	if (rightSelected) {
 		$('#right'+selectedFilename).removeClass('rightSelected');
 	}
@@ -112,8 +126,12 @@ function onClickRight(imageName) {
 		}
 	}
 	else {
+		numberOfWrongs++;
 		$('#mainMsg').html('Wrong match.');
 		$('#left'+selectedFilename).removeClass('leftSelected');
+		if (numberOfWrongs >= maxNumberOfWrongs) {
+			failedWorksheet();
+		}
 	}
 
 	leftSelected = false;
@@ -122,7 +140,29 @@ function onClickRight(imageName) {
 }
 
 function finishedWorksheet() {
+	var endTime = new Date().getTime();
+	var timeTaken = endTime - startTime;
+	var seconds = Math.floor(timeTaken/1000);
+	var minutes = Math.floor(seconds/60);
+	var seconds = Math.floor(seconds%60);
 	$('#main').hide();
 	$('#generate').show();
-	$('#msg').html("Worksheet completed!<br>Select worksheet size and click 'Generate Worksheet'.");
+	$('#msg').html("<p><b style='color: green;'>Worksheet completed!</b></p>"+
+		"<p>Time taken : "+minutes+ " minutes "+seconds+ " seconds</p>"+
+		"<p>Number of clicks " + numberOfClicks + " <i>(perfect = "+ numberOfImages*2 +")</i></p>"+
+		"<p>Select worksheet size and click 'Generate Worksheet'.</p>");
+}
+
+function failedWorksheet() {
+	var endTime = new Date().getTime();
+	var timeTaken = endTime - startTime;
+	var seconds = Math.floor(timeTaken/1000);
+	var minutes = Math.floor(seconds/60);
+	var seconds = Math.floor(seconds%60);
+	$('#main').hide();
+	$('#generate').show();
+	$('#msg').html("<p><b style='color: red;'>Worksheet failed!</b></p>"+
+		"<p>Time taken : "+minutes+ " minutes "+seconds+ " seconds</p>"+
+		"<p>Number of wrong matches " + numberOfWrongs + "</p>"+
+		"<p>Select worksheet size and click 'Generate Worksheet'.</p>");
 }
