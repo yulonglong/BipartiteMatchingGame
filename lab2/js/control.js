@@ -88,6 +88,7 @@ function onClickLeft(imageName) {
 		numberOfWrongs++;
 		$('#mainMsg').html('Wrong match.');
 		$('#right'+selectedFilename).removeClass('rightSelected');
+		$('#left'+imageName).removeClass('leftSelected');
 		if (numberOfWrongs >= maxNumberOfWrongs) {
 			failedWorksheet();
 		}
@@ -129,6 +130,7 @@ function onClickRight(imageName) {
 		numberOfWrongs++;
 		$('#mainMsg').html('Wrong match.');
 		$('#left'+selectedFilename).removeClass('leftSelected');
+		$('#right'+imageName).removeClass('rightSelected');
 		if (numberOfWrongs >= maxNumberOfWrongs) {
 			failedWorksheet();
 		}
