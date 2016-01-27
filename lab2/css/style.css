@@ -56,7 +56,10 @@ img.rightSelected {
 }
 
 img.correctSelected {
-	background-color: #739900;
+	-webkit-filter: saturate(0.2) brightness(0.7);
+	-moz-filter: saturate(0.2) brightness(0.7);
+	-o-filter: saturate(0.2) brightness(0.7);
+	-ms-filter: saturate(0.2) brightness(0.7);
 }
 
 legend {

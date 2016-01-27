@@ -50,6 +50,9 @@ var rightSelected = false;
 var selectedFilename = "";
 
 function onClickLeft(imageName) {
+	if (leftSelected) {
+		$('#left'+selectedFilename).removeClass('leftSelected');
+	}
 	if (!rightSelected) {
 		leftSelected = true;
 		selectedFilename = imageName;
@@ -74,14 +77,18 @@ function onClickLeft(imageName) {
 	}
 	else {
 		$('#mainMsg').html('Wrong match.');
-		$('#right'+selectedFilename).removeClass('wrongSelected rightSelected');
-
-		rightSelected = false;
-		selectedFilename = "";
+		$('#right'+selectedFilename).removeClass('rightSelected');
 	}
+
+	leftSelected = "";
+	rightSelected = false;
+	selectedFilename = "";
 }
 
 function onClickRight(imageName) {
+	if (rightSelected) {
+		$('#right'+selectedFilename).removeClass('rightSelected');
+	}
 	if (!leftSelected) {
 		rightSelected = true;
 		selectedFilename = imageName;
@@ -107,15 +114,15 @@ function onClickRight(imageName) {
 	else {
 		$('#mainMsg').html('Wrong match.');
 		$('#left'+selectedFilename).removeClass('leftSelected');
-
-		leftSelected = false;
-		selectedFilename = "";
 	}
 
 	leftSelected = false;
 	rightSelected = false;
+	selectedFilename = "";
 }
 
 function finishedWorksheet() {
+	$('#main').hide();
 	$('#generate').show();
+	$('#msg').html("Worksheet completed!<br>Select worksheet size and click 'Generate Worksheet'.");
 }
