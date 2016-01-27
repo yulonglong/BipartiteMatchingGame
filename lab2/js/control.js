@@ -32,11 +32,52 @@ function generateWorksheet() {
 	shuffle(rightFilename);
 
 	for(var i=0;i<n;i++){
-		$('#ulLeft').append('<li><img class="cartoon" src="img/' + leftFilename[i] + '"/></li>');
-		$('#ulRight').append('<li><img class="cartoon" src="img/' + rightFilename[i] + '"/></li>');
+		$('#ulLeft').append('<li><img class="cartoon" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '"  onClick="onClickLeft(\''+ leftFilename[i] + '\')"/></li>');
+		$('#ulRight').append('<li><img class="cartoon" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '"  onClick="onClickRight(\'' + rightFilename[i] + '\')"/></li>');
 	}
 
 	$('#generate').hide();
-	$('#main').show()
+	$('#main').show();
+}
 
+var leftSelected = false;
+var rightSelected = false;
+var selectedFilename = "";
+
+function onClickLeft(imageName) {
+	if (!rightSelected) {
+		leftSelected = true;
+		selectedFilename = imageName;
+		$('#mainMsg').html('Select an image from the right column.');
+		return;
+	}
+
+	if (imageName == selectedFilename) {
+		$('#mainMsg').html('Correct match.');
+	}
+	else {
+		$('#mainMsg').html('Wrong match.');
+	}
+
+	leftSelected = false;
+	rightSelected = false;
+}
+
+function onClickRight(imageName) {
+	if (!leftSelected) {
+		rightSelected = true;
+		selectedFilename = imageName;
+		$('#mainMsg').html('Select an image from the left column.');
+		return;
+	}
+
+	if (imageName == selectedFilename) {
+		$('#mainMsg').html('Correct match.');
+	}
+	else {
+		$('#mainMsg').html('Wrong match.');
+	}
+
+	leftSelected = false;
+	rightSelected = false;
 }

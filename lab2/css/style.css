@@ -22,15 +22,29 @@ p {
 	font-size: 1em 	;
 }
 
+ul {
+	list-style-type: none;
+}
+
 img.cartoon {
 	vertical-align: middle;
 	max-width: 200px;
 	max-height: 200px;
+	transition: transform .2s ease-in-out;
 }
 
-img.cartoon:hover {
+ul#ulLeft img.cartoon:hover {
+	transform: translate3d(50px, 0px, 0px);
+	transition: transform .2s ease-in-out;
 	background-color: #b37500;
 }
+
+ul#ulRight img.cartoon:hover {
+	transform: translate3d(-50px, 0px, 0px);
+	transition: transform .2s ease-in-out;
+	background-color: #b37500;
+}
+
 
 legend {
 	display: block;
