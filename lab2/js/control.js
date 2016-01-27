@@ -1,24 +1,42 @@
-function activateWorksheetOne() {
-	$("#section1").show();
-	$("#section2").hide();
-	$("#section3").hide();
+
+var filename = ["raccoon1.png", "raccoon2.png", "raccoon3.png", "raccoon4.png",
+"raccoon5.png", "raccoon6.png", "raccoon7.png", "raccoon8.png", "raccoon9.png",
+"raccoon10.png", "raccoon11.png", "raccoon12.png"];
+
+$("#main").hide()
+
+function shuffle(o){
+    for(var j, z, i = o.length; i; j = Math.floor(Math.random() * i), z = o[--i], o[i] = o[j], o[j] = z);
+    return o;
 }
 
-function activateWorksheetTwo() {
-	$("#section1").hide();
-	$("#section2").show();
-	$("#section3").hide();
+function generateWorksheet() {
+	var n = $('#numberOfImages').val();
+	if ((n < 2) || (n > 12)) {
+		$('#msg').html('Please enter a number between 2 and 12 !');
+		$('#msg').css('color','red');
+		return;
+	}
+
+	$('#ulLeft').empty();
+	$('#ulRight').empty();
+
+	var leftFilename = [];
+	var rightFilename = [];
+	for(var i=0;i<n;i++){
+		leftFilename[i] = filename[i];
+		rightFilename[i] = filename[i];
+	}
+
+	shuffle(leftFilename);
+	shuffle(rightFilename);
+
+	for(var i=0;i<n;i++){
+		$('#ulLeft').append('<li><img class="cartoon" src="img/' + leftFilename[i] + '"/></li>');
+		$('#ulRight').append('<li><img class="cartoon" src="img/' + rightFilename[i] + '"/></li>');
+	}
+
+	$('#generate').hide();
+	$('#main').show()
+
 }
-
-function activateWorksheetThree() {
-	$("#section1").hide();
-	$("#section2").hide();
-	$("#section3").show();
-}
-
-var standardRacoon = ["racoon1.png", "racoon2.png", "racoon3.png", "racoon4.png"];
-var shadowRacoon = ["racoon3shadow.png", "racoon4shadow.png", "racoon5shadow.png", "racoon6shadow.png"];
-var numberedRacoon = ["racoon2.png", "tworacoon3.png", "threeracoon4.png", "fourracoon5.png"];
-var number = ["one.png", "two.png", "three.png", "four.png"];
-
-activateWorksheetOne();

@@ -7,96 +7,33 @@
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
 	</head>
 	<body>
-		<div id="menu">
-			<ul>
-				<li onclick="activateWorksheetOne();">Worksheet 1</li>
-				<li onclick="activateWorksheetTwo();">Worksheet 2</li>
-				<li onclick="activateWorksheetThree();">Worksheet 3</li>
-			</ul>
-		</div>
+		<h1>Interactive Matching Worksheet </h1>
 
-		<section id="section1">
-			<h1>Image Matching Worksheet 1</h1>
+		<section id="generate">
+			<div class="center">
+				<fieldset id="gen"> <!-- yup, we have not discussed fieldset, legend, input, and button in the lecture, so GIYF -->
+				<legend><h2><b>Generate Worksheet</b></h2></legend>
+				<h4>Number of images: 
+					<input type="number" min="2" max="12" value="4" id="numberOfImages">
+					<button id="btn" onclick="generateWorksheet();">Generate Worksheet</button>
+				</h4>
+				</fieldset>
+			</div>
+			<p><span id="msg">Select worksheet size and click 'Generate Worksheet'.</span></p>
+		</section>
+
+		<section id="main" style="display:none;">
 			<h3>Click to match two identical raccoons!</h3>
 			<table>
 				<tr>
-					<td class="column">
-						<ol>
-							<li><img class="cartoon" src="img/raccoon1.png"/></li>
-							<li><img class="cartoon" src="img/raccoon2.png"/></li>
-							<li><img class="cartoon" src="img/raccoon3.png"/></li>
-							<li><img class="cartoon" src="img/raccoon4.png"/></li>
-						</ol>
-					</td>
-					<td><ul></ul></td>
-					<td><ul></ul></td>
-					<td class="column">
-						<ul>
-							<li><img class="cartoon" src="img/raccoon2.png"/></li>
-							<li><img class="cartoon" src="img/raccoon3.png"/></li>
-							<li><img class="cartoon" src="img/raccoon1.png"/></li>
-							<li><img class="cartoon" src="img/raccoon4.png"/></li>
-						</ul>
-					</td>
+					<td class="left"><ul id="ulLeft"></ul></td>
+					<td class="right"><ul id="ulRight"></ul></td>
 				</tr>
 			</table>
+			<p>Cartoons are designed by <a href="http://www.vecteezy.com/vector-art/86958-cartoon-raccoon-set-vector">Vecteezy</a></p>
 		</section>
 
-		<section id="section2">
-			<h1>Image Matching Worksheet 2</h1>
-			<h3>Click to match each raccoon with its own silhouette!</h3>
-			<table>
-				<tr>
-					<td class="column">
-						<ol>
-							<li><img class="cartoon" src="img/raccoon5.png"/></li>
-							<li><img class="cartoon" src="img/raccoon4.png"/></li>
-							<li><img class="cartoon" src="img/raccoon2.png"/></li>
-							<li><img class="cartoon" src="img/raccoon6.png"/></li>
-						</ol>
-					</td>
-					<td><ul></ul></td>
-					<td><ul></ul></td>
-					<td class="column">
-						<ul>
-							<li><img class="cartoon" src="img/raccoon4shadow.png"/></li>
-							<li><img class="cartoon" src="img/raccoon6shadow.png"/></li>
-							<li><img class="cartoon" src="img/raccoon5shadow.png"/></li>
-							<li><img class="cartoon" src="img/raccoon2shadow.png"/></li>
-						</ul>
-					</td>
-				</tr>
-			</table>
-		</section>
-
-		<section id="section3">
-			<h1>Image Matching Worksheet 3</h1>
-			<h3>Click to match the number of raccoons!</h3>
-			<table>
-				<tr>
-					<td class="column">
-						<ol>
-							<li><img class="cartoon" src="img/fourraccoon5.png"/></li>
-							<li><img class="cartoon" src="img/threeraccoon4.png"/></li>
-							<li><img class="cartoon" src="img/raccoon2.png"/></li>
-							<li><img class="cartoon" src="img/tworaccoon3.png"/></li>
-						</ol>
-					</td>
-					<td><ul></ul></td>
-					<td><ul></ul></td>
-					<td class="column">
-						<ul>
-							<li><img class="cartoon" src="img/two.png"/></li>
-							<li><img class="cartoon" src="img/one.png"/></li>
-							<li><img class="cartoon" src="img/three.png"/></li>
-							<li><img class="cartoon" src="img/four.png"/></li>
-						</ul>
-					</td>
-				</tr>
-			</table>
-		</section>
-
-		<p>Cartoons are designed by <a href="http://www.vecteezy.com/vector-art/86958-cartoon-raccoon-set-vector">Vecteezy</a></p>
+		
 	</body>
 
 	<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
