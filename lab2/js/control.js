@@ -60,7 +60,9 @@ var selectedFilename = "";
 function onClickLeft(imageName) {
 	numberOfClicks++;
 	if (leftSelected) {
-		$('#left'+selectedFilename).removeClass('leftSelected');
+		// $('#left'+selectedFilename).removeClass('leftSelected');
+		$('#mainMsg').html('Invalid choice, please select an image from the right column.');
+		return;
 	}
 	if (!rightSelected) {
 		leftSelected = true;
@@ -88,7 +90,6 @@ function onClickLeft(imageName) {
 		numberOfWrongs++;
 		$('#mainMsg').html('Wrong match.');
 		$('#right'+selectedFilename).removeClass('rightSelected');
-		$('#left'+imageName).removeClass('leftSelected');
 		if (numberOfWrongs >= maxNumberOfWrongs) {
 			failedWorksheet();
 		}
@@ -102,7 +103,9 @@ function onClickLeft(imageName) {
 function onClickRight(imageName) {
 	numberOfClicks++;
 	if (rightSelected) {
-		$('#right'+selectedFilename).removeClass('rightSelected');
+		// $('#right'+selectedFilename).removeClass('rightSelected');
+		$('#mainMsg').html('Invalid choice, please select an image from the left column.');
+		return;
 	}
 	if (!leftSelected) {
 		rightSelected = true;
@@ -130,7 +133,7 @@ function onClickRight(imageName) {
 		numberOfWrongs++;
 		$('#mainMsg').html('Wrong match.');
 		$('#left'+selectedFilename).removeClass('leftSelected');
-		$('#right'+imageName).removeClass('rightSelected');
+		
 		if (numberOfWrongs >= maxNumberOfWrongs) {
 			failedWorksheet();
 		}
