@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Lab 2 - Image Matching</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
+	</head>
+	<body>
+		<h1>Interactive Matching Worksheet </h1>
+
+		<section id="generate">
+			<div class="center">
+				<fieldset id="gen"> <!-- yup, we have not discussed fieldset, legend, input, and button in the lecture, so GIYF -->
+				<legend><h2><b>Generate Worksheet</b></h2></legend>
+				<h4>Number of images: 
+					<input type="number" min="2" max="12" value="4" id="numberOfImages">
+					<button id="btn" onclick="generateWorksheet();">Generate Worksheet</button>
+				</h4>
+				</fieldset>
+			</div>
+			<div id="msg"><p>Select worksheet size and click 'Generate Worksheet'.</p></div>
+		</section>
+
+		<section id="main" style="display:none;">
+			<h3>Click to match two identical raccoons!</h3>
+			<p><span id="mainMsg">Select an image to start</span></p>
+			<table>
+				<tr>
+					<td class="left"><ul id="ulLeft"></ul></td>
+					<td class="right"><ul id="ulRight"></ul></td>
+				</tr>
+			</table>
+			<p>Cartoons are designed by <a href="http://www.vecteezy.com/vector-art/86958-cartoon-raccoon-set-vector">Vecteezy</a></p>
+		</section>
+
+		
+	</body>
+
+	<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+	<script src="js/control.js"></script>
+</html>
