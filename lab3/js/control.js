@@ -15,6 +15,19 @@ function shuffle(o){
     return o;
 }
 
+function drawLine(indexLeft, indexRight) {
+	var leftX = 0;
+	var leftY = 50; //(numberOfImages*200)-100 - indexLeft*200;
+	var rightX = 300;
+	var rightY = 50; // (numberOfImages*200)-100 - indexRight*200;
+	var c=document.getElementById("cvs");
+	var ctx=c.getContext("2d");
+	ctx.beginPath();
+	ctx.moveTo(leftX,leftY);
+	ctx.lineTo(rightX,rightY);
+	ctx.stroke();
+}
+
 function generateWorksheet() {
 	var n = $('#numberOfImages').val();
 	if ((n < 2) || (n > 12)) {
@@ -43,21 +56,25 @@ function generateWorksheet() {
 	shuffle(rightFilename);
 
 	for(var i=0;i<n;i++){
-		$('#ulLeft').append('<li><img class="cartoon" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\')"/></li>');
-		$('#ulRight').append('<li><img class="cartoon" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '.png"  onClick="onClickRight(\'' + rightFilename[i] + '\')"/></li>');
+		$('#ulLeft').append('<li><img class="cartoon" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\','+i+')"/></li>');
+		$('#ulRight').append('<li><img class="cartoon" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '.png"  onClick="onClickRight(\'' + rightFilename[i] + '\','+i+')"/></li>');
 	}
 
 	$('#generate').hide();
 	$('#main').show();
 	$('#mainMsg').html('Select an image to start.');
+	$('#cvs').height(200*n);
+	$('#cvs').width(300);
 	startTime = new Date().getTime();
 }
 
 var leftSelected = false;
 var rightSelected = false;
 var selectedFilename = "";
+var leftSelectedIndex = -1;
+var rightSelectedIndex = -1;
 
-function onClickLeft(imageName) {
+function onClickLeft(imageName, index) {
 	numberOfClicks++;
 	if (leftSelected) {
 		// $('#left'+selectedFilename).removeClass('leftSelected');
@@ -69,6 +86,7 @@ function onClickLeft(imageName) {
 		selectedFilename = imageName;
 		$('#mainMsg').html('Select an image from the right column.');
 		$('#left'+selectedFilename).addClass('leftSelected');
+		rightSelectedIndex = index;
 		return;
 	}
 
@@ -80,6 +98,9 @@ function onClickLeft(imageName) {
 
 		$('#left'+imageName).attr('onClick','');
 		$('#right'+selectedFilename).attr('onClick','');
+
+		rightSelectedIndex = index;
+		drawLine(leftSelectedIndex, rightSelectedIndex);
 
 		correctImages += 1;
 		if (correctImages == numberOfImages) {
@@ -98,9 +119,11 @@ function onClickLeft(imageName) {
 	leftSelected = "";
 	rightSelected = false;
 	selectedFilename = "";
+	leftSelectedIndex = -1;
+	rightSelectedIndex = -1;
 }
 
-function onClickRight(imageName) {
+function onClickRight(imageName, index) {
 	numberOfClicks++;
 	if (rightSelected) {
 		// $('#right'+selectedFilename).removeClass('rightSelected');
@@ -112,6 +135,7 @@ function onClickRight(imageName) {
 		selectedFilename = imageName;
 		$('#mainMsg').html('Select an image from the left column.');
 		$('#right'+selectedFilename).addClass('rightSelected');
+		leftSelectedIndex = index;
 		return;
 	}
 
@@ -123,6 +147,9 @@ function onClickRight(imageName) {
 
 		$('#right'+imageName).attr('onClick','');
 		$('#left'+selectedFilename).attr('onClick','');
+
+		leftSelectedIndex = index;
+		drawLine(leftSelectedIndex, rightSelectedIndex);
 
 		correctImages += 1;
 		if (correctImages == numberOfImages) {
@@ -142,6 +169,8 @@ function onClickRight(imageName) {
 	leftSelected = false;
 	rightSelected = false;
 	selectedFilename = "";
+	leftSelectedIndex = -1;
+	rightSelectedIndex = -1;
 }
 
 function finishedWorksheet() {
