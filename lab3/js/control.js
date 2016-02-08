@@ -25,7 +25,12 @@ function drawLine(indexLeft, indexRight) {
 
 	ctx.beginPath();
 	ctx.moveTo(leftX,leftY);
-	ctx.lineTo(rightX,rightY);
+	if (Math.abs(indexLeft-indexRight) <= 1) {
+		ctx.lineTo(rightX,rightY);
+	}
+	else {
+		ctx.bezierCurveTo(leftX+150,leftY,rightX-150,rightY,rightX,rightY);
+	}
 	ctx.stroke();
 }
 
@@ -184,7 +189,7 @@ function finishedWorksheet() {
 	var seconds = Math.floor(timeTaken/1000);
 	var minutes = Math.floor(seconds/60);
 	var seconds = Math.floor(seconds%60);
-	$('#main').hide();
+	// $('#main').hide();
 	$('#generate').show();
 	$('#msg').html("<p><b style='color: green;'>Worksheet completed!</b></p>"+
 		"<p>Time taken : "+minutes+ " minutes "+seconds+ " seconds</p>"+
@@ -198,7 +203,7 @@ function failedWorksheet() {
 	var seconds = Math.floor(timeTaken/1000);
 	var minutes = Math.floor(seconds/60);
 	var seconds = Math.floor(seconds%60);
-	$('#main').hide();
+	// $('#main').hide();
 	$('#generate').show();
 	$('#msg').html("<p><b style='color: red;'>Worksheet failed!</b></p>"+
 		"<p>Time taken : "+minutes+ " minutes "+seconds+ " seconds</p>"+
