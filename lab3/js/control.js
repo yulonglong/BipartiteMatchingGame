@@ -22,12 +22,14 @@ function shuffle(o){
 }
 
 function drawStraightLine(l,r) {
-	var leftX = 0;
-	var leftY = 100 + (l*200);
-	var rightX = 300;
-	var rightY = 100 + (r*200);
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
+
+	var leftX = 0;
+	var leftY = (c.height/numberOfImages/2) + (l*c.height/numberOfImages);
+	var rightX = c.width;
+	var rightY = (c.height/numberOfImages/2) + (r*c.height/numberOfImages);
+	
 	ctx.beginPath();
 	ctx.moveTo(leftX,leftY);
 	ctx.lineTo(rightX,rightY);
@@ -35,15 +37,17 @@ function drawStraightLine(l,r) {
 }
 
 function drawBezierCurve(l,r) {
-	var leftX = 0;
-	var leftY = 100 + (l*200);
-	var rightX = 300;
-	var rightY = 100 + (r*200);
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
+
+	var leftX = 0;
+	var leftY = (c.height/numberOfImages/2) + (l*c.height/numberOfImages);
+	var rightX = c.width;
+	var rightY = (c.height/numberOfImages/2) + (r*c.height/numberOfImages);
+	
 	ctx.beginPath();
 	ctx.moveTo(leftX,leftY);
-	ctx.bezierCurveTo(leftX+150,leftY,rightX-150,rightY,rightX,rightY);
+	ctx.bezierCurveTo(leftX+c.width/2,leftY,rightX-c.width/2,rightY,rightX,rightY);
 	ctx.stroke();
 }
 
@@ -113,8 +117,8 @@ function generateWorksheet() {
 	shuffle(rightFilename);
 
 	for(var i=0;i<n;i++){
-		$('#ulLeft').append('<li><img class="cartoon" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\','+i+')"/></li>');
-		$('#ulRight').append('<li><img class="cartoon" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '.png"  onClick="onClickRight(\'' + rightFilename[i] + '\','+i+')"/></li>');
+		$('#ulLeft').append('<div><img class="cartoon left" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\','+i+')"/></div>');
+		$('#ulRight').append('<div><img class="cartoon right" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '.png"  onClick="onClickRight(\'' + rightFilename[i] + '\','+i+')"/></div>');
 	}
 
 	$('#generate').hide();
@@ -125,9 +129,16 @@ function generateWorksheet() {
 
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
-	var height = 200 * n;
-	c.height = height;
-	c.width = 300;
+
+	var currHeight = window.innerWidth/3;
+	var currWidth = window.innerWidth/3;
+	if (window.innerWidth/3 > 200) {
+		currHeight = 200;
+		currWidth = (window.innerWidth - 400)*0.95;
+	}
+
+	c.width = currWidth;
+	c.height = currHeight*n;
 	ctx.clearRect(0, 0, c.width, c.height);
 
 	startTime = new Date().getTime();

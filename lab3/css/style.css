@@ -28,30 +28,32 @@ ul {
 
 img.cartoon {
 	vertical-align: middle;
+	width: 100%;
+	height: 100%;
 	max-width: 200px;
 	max-height: 200px;
 	transition: all .2s ease-in-out;
 }
 
-ul#ulLeft img.cartoon:hover {
-	transform: translate3d(50px, 0px, 0px);
+div#ulLeft img.cartoon:hover {
+	transform: translate3d(5%, 0px, 0px);
 	transition: all .2s ease-in-out;
 	background-color: #e69600;
 }
 
-ul#ulRight img.cartoon:hover {
-	transform: translate3d(-50px, 0px, 0px);
+div#ulRight img.cartoon:hover {
+	transform: translate3d(-5%, 0px, 0px);
 	transition: all .2s ease-in-out;
 	background-color: #e69600;
 }
 
 img.leftSelected {
-	transform: translate3d(50px, 0px, 0px);
+	transform: translate3d(5%, 0px, 0px);
 	background-color: #e69600;
 }
 
 img.rightSelected {
-	transform: translate3d(-50px, 0px, 0px);
+	transform: translate3d(-5%, 0px, 0px);
 	background-color: #e69600;
 }
 
@@ -64,8 +66,6 @@ img.correctSelected {
 
 legend {
 	display: block;
-	padding-left: 5px;
-	padding-right: 5px;
 	border: none;
 	text-align: center;
 }
@@ -73,14 +73,7 @@ fieldset {
 	display: inline-block;
 }
 
-div.center {
+.center {
 	width: auto;
 	text-align: center;
 }
-
-table {
-	margin-left: auto;
-	margin-right: auto;
-}
-
-td { font-size: 200%; }
