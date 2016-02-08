@@ -8,7 +8,13 @@ var filename = ["raccoon1", "raccoon2", "raccoon3", "raccoon4",
 "raccoon5", "raccoon6", "raccoon7", "raccoon8", "raccoon9",
 "raccoon10", "raccoon11", "raccoon12"];
 
-$("#main").hide()
+var leftSelected = false;
+var rightSelected = false;
+var selectedFilename = "";
+var selectedIndex = -1;
+var match = [];
+
+generateWorksheet(4);
 
 function shuffle(o){
     for(var j, z, i = o.length; i; j = Math.floor(Math.random() * i), z = o[--i], o[i] = o[j], o[j] = z);
@@ -48,7 +54,7 @@ function drawLine(matches) {
 
 	for(var i=0;i<numberOfImages;i++) {
 		if (matches[i] == -1) continue;
-		
+
 		if (Math.abs(i-matches[i]) <= 1) {
 			drawStraightLine(i,matches[i]);
 		}
@@ -58,8 +64,29 @@ function drawLine(matches) {
 	}
 }
 
+function dialoguePopup() {
+	// BootstrapDialog.show({
+ //            message: 'Your most favorite fruit: <input type="text" class="form-control">',
+ //            onhide: function(dialogRef){
+ //                var fruit = dialogRef.getModalBody().find('input').val();
+ //                if($.trim(fruit.toLowerCase()) !== 'banana') {
+ //                    alert('Need banana!');
+ //                    return false;
+ //                }
+ //            },
+ //            buttons: [{
+ //                label: 'Close',
+ //                action: function(dialogRef) {
+ //                    dialogRef.close();
+ //                }
+ //            }]
+ //        });
+}
+
 function generateWorksheet() {
 	var n = $('#numberOfImages').val();
+	if (n == null) n = 4;
+
 	if ((n < 2) || (n > 12)) {
 		$('#msg').html('<p>Please enter a number between 2 and 12 !</p>');
 		$('#msg').css('color','red');
@@ -106,11 +133,7 @@ function generateWorksheet() {
 	startTime = new Date().getTime();
 }
 
-var leftSelected = false;
-var rightSelected = false;
-var selectedFilename = "";
-var selectedIndex = -1;
-var match = [];
+
 
 function onClickLeft(imageName, index) {
 	numberOfClicks++;
