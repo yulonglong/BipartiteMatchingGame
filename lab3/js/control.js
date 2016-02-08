@@ -17,11 +17,12 @@ function shuffle(o){
 
 function drawLine(indexLeft, indexRight) {
 	var leftX = 0;
-	var leftY = 50; //(numberOfImages*200)-100 - indexLeft*200;
+	var leftY = 100 + (indexLeft*200);
 	var rightX = 300;
-	var rightY = 50; // (numberOfImages*200)-100 - indexRight*200;
+	var rightY = 100 + (indexRight*200);
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
+
 	ctx.beginPath();
 	ctx.moveTo(leftX,leftY);
 	ctx.lineTo(rightX,rightY);
@@ -63,8 +64,14 @@ function generateWorksheet() {
 	$('#generate').hide();
 	$('#main').show();
 	$('#mainMsg').html('Select an image to start.');
-	$('#cvs').height(200*n);
-	$('#cvs').width(300);
+
+	var c=document.getElementById("cvs");
+	var ctx=c.getContext("2d");
+	var height = 200 * n;
+	c.height = height;
+	c.width = 300;
+	// $('#cvs').height(200*n);
+	// $('#cvs').width(300);
 	startTime = new Date().getTime();
 }
 
@@ -86,7 +93,7 @@ function onClickLeft(imageName, index) {
 		selectedFilename = imageName;
 		$('#mainMsg').html('Select an image from the right column.');
 		$('#left'+selectedFilename).addClass('leftSelected');
-		rightSelectedIndex = index;
+		leftSelectedIndex = index;
 		return;
 	}
 
@@ -99,8 +106,7 @@ function onClickLeft(imageName, index) {
 		$('#left'+imageName).attr('onClick','');
 		$('#right'+selectedFilename).attr('onClick','');
 
-		rightSelectedIndex = index;
-		drawLine(leftSelectedIndex, rightSelectedIndex);
+		drawLine(index, rightSelectedIndex);
 
 		correctImages += 1;
 		if (correctImages == numberOfImages) {
@@ -135,7 +141,7 @@ function onClickRight(imageName, index) {
 		selectedFilename = imageName;
 		$('#mainMsg').html('Select an image from the left column.');
 		$('#right'+selectedFilename).addClass('rightSelected');
-		leftSelectedIndex = index;
+		rightSelectedIndex = index;
 		return;
 	}
 
@@ -148,8 +154,7 @@ function onClickRight(imageName, index) {
 		$('#right'+imageName).attr('onClick','');
 		$('#left'+selectedFilename).attr('onClick','');
 
-		leftSelectedIndex = index;
-		drawLine(leftSelectedIndex, rightSelectedIndex);
+		drawLine(leftSelectedIndex, index);
 
 		correctImages += 1;
 		if (correctImages == numberOfImages) {
