@@ -15,23 +15,47 @@ function shuffle(o){
     return o;
 }
 
-function drawLine(indexLeft, indexRight) {
+function drawStraightLine(l,r) {
 	var leftX = 0;
-	var leftY = 100 + (indexLeft*200);
+	var leftY = 100 + (l*200);
 	var rightX = 300;
-	var rightY = 100 + (indexRight*200);
+	var rightY = 100 + (r*200);
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
-
 	ctx.beginPath();
 	ctx.moveTo(leftX,leftY);
-	if (Math.abs(indexLeft-indexRight) <= 1) {
-		ctx.lineTo(rightX,rightY);
-	}
-	else {
-		ctx.bezierCurveTo(leftX+150,leftY,rightX-150,rightY,rightX,rightY);
-	}
+	ctx.lineTo(rightX,rightY);
 	ctx.stroke();
+}
+
+function drawBezierCurve(l,r) {
+	var leftX = 0;
+	var leftY = 100 + (l*200);
+	var rightX = 300;
+	var rightY = 100 + (r*200);
+	var c=document.getElementById("cvs");
+	var ctx=c.getContext("2d");
+	ctx.beginPath();
+	ctx.moveTo(leftX,leftY);
+	ctx.bezierCurveTo(leftX+150,leftY,rightX-150,rightY,rightX,rightY);
+	ctx.stroke();
+}
+
+function drawLine(matches) {
+	var c=document.getElementById("cvs");
+	var ctx=c.getContext("2d");
+	ctx.clearRect(0, 0, c.width, c.height);
+
+	for(var i=0;i<numberOfImages;i++) {
+		if (matches[i] == -1) continue;
+		
+		if (Math.abs(i-matches[i]) <= 1) {
+			drawStraightLine(i,matches[i]);
+		}
+		else {
+			drawBezierCurve(i,matches[i]);
+		}
+	}
 }
 
 function generateWorksheet() {
@@ -70,21 +94,23 @@ function generateWorksheet() {
 	$('#main').show();
 	$('#mainMsg').html('Select an image to start.');
 
+	for (var i = 0; i < numberOfImages; i++) match[i] = -1;
+
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
 	var height = 200 * n;
 	c.height = height;
 	c.width = 300;
-	// $('#cvs').height(200*n);
-	// $('#cvs').width(300);
+	ctx.clearRect(0, 0, c.width, c.height);
+
 	startTime = new Date().getTime();
 }
 
 var leftSelected = false;
 var rightSelected = false;
 var selectedFilename = "";
-var leftSelectedIndex = -1;
-var rightSelectedIndex = -1;
+var selectedIndex = -1;
+var match = [];
 
 function onClickLeft(imageName, index) {
 	numberOfClicks++;
@@ -98,7 +124,7 @@ function onClickLeft(imageName, index) {
 		selectedFilename = imageName;
 		$('#mainMsg').html('Select an image from the right column.');
 		$('#left'+selectedFilename).addClass('leftSelected');
-		leftSelectedIndex = index;
+		selectedIndex = index;
 		return;
 	}
 
@@ -111,7 +137,8 @@ function onClickLeft(imageName, index) {
 		$('#left'+imageName).attr('onClick','');
 		$('#right'+selectedFilename).attr('onClick','');
 
-		drawLine(index, rightSelectedIndex);
+		match[index] = selectedIndex;
+		drawLine(match);
 
 		correctImages += 1;
 		if (correctImages == numberOfImages) {
@@ -146,7 +173,7 @@ function onClickRight(imageName, index) {
 		selectedFilename = imageName;
 		$('#mainMsg').html('Select an image from the left column.');
 		$('#right'+selectedFilename).addClass('rightSelected');
-		rightSelectedIndex = index;
+		selectedIndex = index;
 		return;
 	}
 
@@ -159,7 +186,8 @@ function onClickRight(imageName, index) {
 		$('#right'+imageName).attr('onClick','');
 		$('#left'+selectedFilename).attr('onClick','');
 
-		drawLine(leftSelectedIndex, index);
+		match[selectedIndex] = index;
+		drawLine(match);
 
 		correctImages += 1;
 		if (correctImages == numberOfImages) {
