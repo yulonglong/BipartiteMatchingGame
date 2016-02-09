@@ -88,6 +88,8 @@ function dialoguePopup() {
 }
 
 function generateWorksheet() {
+	$('.msg').html("");
+	
 	var n = $('#numberOfImages').val();
 	if (n == null) n = 4;
 
