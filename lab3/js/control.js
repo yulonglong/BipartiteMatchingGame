@@ -14,7 +14,7 @@ var selectedFilename = "";
 var selectedIndex = -1;
 var match = [];
 
-generateWorksheet(4);
+generateWorksheet();
 
 function shuffle(o){
     for(var j, z, i = o.length; i; j = Math.floor(Math.random() * i), z = o[--i], o[i] = o[j], o[j] = z);
@@ -116,7 +116,10 @@ function generateWorksheet() {
 	shuffle(leftFilename);
 	shuffle(rightFilename);
 
+	var oneImgId;
+
 	for(var i=0;i<n;i++){
+		oneImgId = "left"+leftFilename[i];
 		$('#ulLeft').append('<div><img class="cartoon left" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\','+i+')"/></div>');
 		$('#ulRight').append('<div><img class="cartoon right" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '.png"  onClick="onClickRight(\'' + rightFilename[i] + '\','+i+')"/></div>');
 	}
@@ -130,15 +133,11 @@ function generateWorksheet() {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
 
-	var currHeight = window.innerWidth/3;
-	var currWidth = window.innerWidth/3;
-	if (window.innerWidth/3 > 200) {
-		currHeight = 200;
-		currWidth = (window.innerWidth - 400)*0.95;
-	}
+	var imgRacoon = document.getElementById(oneImgId);
 
-	c.width = currWidth;
-	c.height = currHeight*n;
+	c.width  = imgRacoon.clientWidth*1.5;
+	c.height = imgRacoon.clientWidth*n;
+	
 	ctx.clearRect(0, 0, c.width, c.height);
 
 	startTime = new Date().getTime();

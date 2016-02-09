@@ -2,11 +2,13 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Lab 3 - Image Matching</title>
-		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
 
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
+		
 	</head>
 	<body>
 		<h1>Interactive Matching Worksheet </h1>
@@ -15,13 +17,15 @@
 
 			<h3>Click to match two identical raccoons!</h3>
 			<p><span id="mainMsg">Select an image to start</span></p>
-			<table width = "100%">
-				<tr>
-					<td class="left" ><div id="ulLeft"  class="center"></div></td>
-					<td class="middle center" id="tdMiddle"><canvas id="cvs"></canvas></td>
-					<td class="right"><div id="ulRight"  class="center"></div></td>
-				</tr>
-			</table>
+			<div class= "container center">
+				<table id="theTable" class="center">
+					<tr>
+						<td class="left" width="30%" ><div id="ulLeft"  class="center"></div></td>
+						<td class="middle" width="40%" id="tdMiddle"><canvas id="cvs"></canvas></td>
+						<td class="right" width="30%"><div id="ulRight"  class="center"></div></td>
+					</tr>
+				</table>
+			</div>
 
 			<div class="container center">
 				<!-- Trigger the modal with a button -->
