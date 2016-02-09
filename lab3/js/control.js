@@ -163,7 +163,7 @@ function onClickLeft(imageName, index) {
 
 	// If correct
 	if (imageName == selectedFilename) {
-		$('#mainMsg').html('Correct match.');
+		$('#mainMsg').html("<p><b style='color: green;'>Correct match.</b></p>");
 		$('#left'+imageName).addClass('leftSelected correctSelected');
 		$('#right'+selectedFilename).addClass('correctSelected');
 
@@ -180,11 +180,11 @@ function onClickLeft(imageName, index) {
 	}
 	else {
 		numberOfWrongs++;
-		$('#mainMsg').html('Wrong match.');
+		$('#mainMsg').html("<p><b style='color: red;'>Wrong match.</b></p>");
 		$('#right'+selectedFilename).removeClass('rightSelected');
-		if (numberOfWrongs >= maxNumberOfWrongs) {
-			failedWorksheet();
-		}
+		// if (numberOfWrongs >= maxNumberOfWrongs) {
+		// 	failedWorksheet();
+		// }
 	}
 
 	leftSelected = "";
@@ -212,7 +212,7 @@ function onClickRight(imageName, index) {
 
 	// If correct
 	if (imageName == selectedFilename) {
-		$('#mainMsg').html('Correct match.');
+		$('#mainMsg').html("<p><b style='color: green;'>Correct match.</b></p>");
 		$('#right'+imageName).addClass('rightSelected correctSelected');
 		$('#left'+selectedFilename).addClass('correctSelected');
 
@@ -229,12 +229,12 @@ function onClickRight(imageName, index) {
 	}
 	else {
 		numberOfWrongs++;
-		$('#mainMsg').html('Wrong match.');
+		$('#mainMsg').html("<p><b style='color: red;'>Wrong match.</b></p>");
 		$('#left'+selectedFilename).removeClass('leftSelected');
 		
-		if (numberOfWrongs >= maxNumberOfWrongs) {
-			failedWorksheet();
-		}
+		// if (numberOfWrongs >= maxNumberOfWrongs) {
+		// 	failedWorksheet();
+		// }
 	}
 
 	leftSelected = false;
@@ -252,10 +252,11 @@ function finishedWorksheet() {
 	var seconds = Math.floor(seconds%60);
 	// $('#main').hide();
 	$('#generate').show();
-	$('#msg').html("<p><b style='color: green;'>Worksheet completed!</b></p>"+
-		"<p>Time taken : "+minutes+ " minutes "+seconds+ " seconds</p>"+
-		"<p>Number of clicks " + numberOfClicks + " <i>(perfect = "+ numberOfImages*2 +")</i></p>"+
-		"<p>Select worksheet size and click 'Generate Worksheet'.</p>");
+	$('#msg').html("<p><b style='color: green;'>Worksheet completed!</b></p>");
+	// $('#msg').html("<p><b style='color: green;'>Worksheet completed!</b></p>"+
+	// 	"<p>Time taken : "+minutes+ " minutes "+seconds+ " seconds</p>"+
+	// 	"<p>Number of clicks " + numberOfClicks + " <i>(perfect = "+ numberOfImages*2 +")</i></p>"+
+	// 	"<p>Select worksheet size and click 'Generate Worksheet'.</p>");
 }
 
 function failedWorksheet() {
