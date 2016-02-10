@@ -122,8 +122,8 @@ function generateWorksheet() {
 
 	for(var i=0;i<n;i++){
 		oneImgId = "left"+leftFilename[i];
-		$('#ulLeft').append('<div><img class="cartoon left" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\','+i+')"/></div>');
-		$('#ulRight').append('<div><img class="cartoon right" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '.png"  onClick="onClickRight(\'' + rightFilename[i] + '\','+i+')"/></div>');
+		$('#ulLeft').append('<div><img class="cartoon unselected left" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\','+i+')"/></div>');
+		$('#ulRight').append('<div><img class="cartoon unselected right" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '.png"  onClick="onClickRight(\'' + rightFilename[i] + '\','+i+')"/></div>');
 	}
 
 	$('#generate').hide();
@@ -159,6 +159,7 @@ function onClickLeft(imageName, index) {
 		selectedFilename = imageName;
 		$('.mainMsg').html('Select an image from the right column.');
 		$('#left'+selectedFilename).addClass('leftSelected');
+		$('#left'+selectedFilename).removeClass('unselected');
 		selectedIndex = index;
 		return;
 	}
@@ -184,6 +185,7 @@ function onClickLeft(imageName, index) {
 		numberOfWrongs++;
 		$('.mainMsg').html("<p><b style='color: red;'>Wrong match.</b></p>");
 		$('#right'+selectedFilename).removeClass('rightSelected');
+		$('#right'+selectedFilename).addClass('unselected');
 		// if (numberOfWrongs >= maxNumberOfWrongs) {
 		// 	failedWorksheet();
 		// }
@@ -208,6 +210,7 @@ function onClickRight(imageName, index) {
 		selectedFilename = imageName;
 		$('.mainMsg').html('Select an image from the left column.');
 		$('#right'+selectedFilename).addClass('rightSelected');
+		$('#right'+selectedFilename).removeClass('unselected');
 		selectedIndex = index;
 		return;
 	}
@@ -233,7 +236,7 @@ function onClickRight(imageName, index) {
 		numberOfWrongs++;
 		$('.mainMsg').html("<p><b style='color: red;'>Wrong match.</b></p>");
 		$('#left'+selectedFilename).removeClass('leftSelected');
-		
+		$('#left'+selectedFilename).addClass('unselected');
 		// if (numberOfWrongs >= maxNumberOfWrongs) {
 		// 	failedWorksheet();
 		// }

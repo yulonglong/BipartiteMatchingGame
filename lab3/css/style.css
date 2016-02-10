@@ -35,16 +35,16 @@ img.cartoon {
 	transition: all .2s ease-in-out;
 }
 
-div#ulLeft img.cartoon:hover {
+div#ulLeft img.unselected:hover {
 	transform: translate3d(5%, 0px, 0px);
 	transition: all .2s ease-in-out;
-	background-color: #e69600;
+	background-color: #ffa600;
 }
 
-div#ulRight img.cartoon:hover {
+div#ulRight img.unselected:hover {
 	transform: translate3d(-5%, 0px, 0px);
 	transition: all .2s ease-in-out;
-	background-color: #e69600;
+	background-color: #ffa600;
 }
 
 img.leftSelected {
