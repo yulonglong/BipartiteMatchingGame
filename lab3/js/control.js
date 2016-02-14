@@ -4,9 +4,9 @@ var startTime;
 var numberOfClicks = 0;
 var numberOfWrongs = 0;
 var maxNumberOfWrongs = 0;
-var filename = ["raccoon1", "raccoon2", "raccoon3", "raccoon4",
-"raccoon5", "raccoon6", "raccoon7", "raccoon8", "raccoon9",
-"raccoon10", "raccoon11", "raccoon12"];
+var filename = ["pic1", "pic2", "pic3", "pic4",
+"pic5", "pic6", "pic7", "pic8", "pic9",
+"pic10", "pic11", "pic12"];
 
 var leftSelected = false;
 var rightSelected = false;
