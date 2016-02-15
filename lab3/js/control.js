@@ -68,23 +68,11 @@ function drawLine(matches) {
 	}
 }
 
-function dialoguePopup() {
-	// BootstrapDialog.show({
- //            message: 'Your most favorite fruit: <input type="text" class="form-control">',
- //            onhide: function(dialogRef){
- //                var fruit = dialogRef.getModalBody().find('input').val();
- //                if($.trim(fruit.toLowerCase()) !== 'banana') {
- //                    alert('Need banana!');
- //                    return false;
- //                }
- //            },
- //            buttons: [{
- //                label: 'Close',
- //                action: function(dialogRef) {
- //                    dialogRef.close();
- //                }
- //            }]
- //        });
+function isValidShuffle(leftFilename, rightFilename) {
+	for(var i=0;i<numberOfImages;i++){
+		if (leftFilename[i] == rightFilename[i]) return false;
+	}
+	return true;
 }
 
 function generateWorksheet() {
@@ -117,6 +105,12 @@ function generateWorksheet() {
 
 	shuffle(leftFilename);
 	shuffle(rightFilename);
+
+	// Disable same images to appear on the same row
+	while (!isValidShuffle(leftFilename,rightFilename)) {
+		shuffle(leftFilename);
+		shuffle(rightFilename);
+	}
 
 	var oneImgId;
 
