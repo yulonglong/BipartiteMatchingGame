@@ -6,82 +6,30 @@ var numberOfClicks = 0;
 var numberOfWrongs = 0;
 var maxNumberOfWrongs = 0;
 
-var filenameRaccoon = ["raccoon1", "raccoon2", "raccoon3", "raccoon4",
-"raccoon5", "raccoon6", "raccoon7", "raccoon8", "raccoon9",
-"raccoon10", "raccoon11", "raccoon12"];
-var filename = ["toast1", "toast2", "toast3", "toast4",
-"toast5", "toast6", "toast7", "toast8", "toast9",
-"toast10", "toast11", "toast12"];
+var filenameRaccoon = ["raccoon1", "raccoon2", "raccoon3", "raccoon4", "raccoon5", "raccoon6", "raccoon7", "raccoon8", "raccoon9", "raccoon10", "raccoon11", "raccoon12"];
+var filename = ["toast1", "toast2", "toast3", "toast4", "toast5", "toast6", "toast7", "toast8", "toast9", "toast10", "toast11", "toast12"];
 
 var leftSelected = false;
 var rightSelected = false;
 var selectedFilename = "";
 var selectedIndex = -1;
-var match = [];
+var lineArray = [[false,false]];
+var weightArray = [[0,0]];
 
+initializeArray();
 generateWorksheet();
 
-function shuffle(o){
-    for(var j, z, i = o.length; i; j = Math.floor(Math.random() * i), z = o[--i], o[i] = o[j], o[j] = z);
-    return o;
-}
-
-function drawStraightLine(l,r) {
-	var c=document.getElementById("cvs");
-	var ctx=c.getContext("2d");
-
-	var numberOfImages = Math.max(numberOfImagesLeft,numberOfImagesRight);
-
-	var leftX = 0;
-	var leftY = (c.height/numberOfImages/2) + (l*c.height/numberOfImages);
-	var rightX = c.width;
-	var rightY = (c.height/numberOfImages/2) + (r*c.height/numberOfImages);
-	
-	ctx.beginPath();
-	ctx.moveTo(leftX,leftY);
-	ctx.lineTo(rightX,rightY);
-	ctx.stroke();
-}
-
-function drawBezierCurve(l,r) {
-	var c=document.getElementById("cvs");
-	var ctx=c.getContext("2d");
-
-	var numberOfImages = Math.max(numberOfImagesLeft,numberOfImagesRight);
-
-	var leftX = 0;
-	var leftY = (c.height/numberOfImages/2) + (l*c.height/numberOfImages);
-	var rightX = c.width;
-	var rightY = (c.height/numberOfImages/2) + (r*c.height/numberOfImages);
-	
-	ctx.beginPath();
-	ctx.moveTo(leftX,leftY);
-	ctx.bezierCurveTo(leftX+c.width/2,leftY,rightX-c.width/2,rightY,rightX,rightY);
-	ctx.stroke();
-}
-
-function drawLine(matches) {
-	var c=document.getElementById("cvs");
-	var ctx=c.getContext("2d");
-	ctx.clearRect(0, 0, c.width, c.height);
-
-	for(var i=0;i<numberOfImagesLeft;i++) {
-		if (matches[i] == -1) continue;
-
-		if (Math.abs(i-matches[i]) <= 1) {
-			drawStraightLine(i,matches[i]);
-		}
-		else {
-			drawBezierCurve(i,matches[i]);
+function initializeArray() {
+	lineArray = new Array(10);
+	weightArray = new Array(10);
+	for (var i = 0; i < 10; i++) {
+		lineArray[i] = new Array(10);
+		weightArray[i] = new Array(10);
+		for (var j = 0; j < 10; j++) {
+			lineArray[i][j] = false;
+			weightArray[i][j] = 0;
 		}
 	}
-}
-
-function isValidShuffle(leftFilename, rightFilename) {
-	for(var i=0;i<numberOfImages;i++){
-		if (leftFilename[i] == rightFilename[i]) return false;
-	}
-	return true;
 }
 
 function generateWorksheet() {
@@ -147,7 +95,13 @@ function generateWorksheet() {
 	// $('#main').show();
 	$('.mainMsg').html('Select an image to start.');
 
-	for (var i = 0; i < numberOfImagesLeft; i++) match[i] = 1;
+	initializeArray();
+	for (var i = 0; i < numberOfImagesLeft; i++) {
+		for (var j = 0; j < numberOfImagesRight; j++) { 
+			lineArray[i][j] = true;
+			weightArray[i][j] = 10;
+		}
+	}
 
 	// Decide on the size of canvas based on the image size
 	var c=document.getElementById("cvs");
@@ -163,7 +117,7 @@ function generateWorksheet() {
 	ctx.clearRect(0, 0, c.width, c.height);
 	// end canvas size setting
 
-	drawLine(match);
+	drawLine(lineArray, weightArray, numberOfImagesLeft, numberOfImagesRight);
 
 	startTime = new Date().getTime();
 }
