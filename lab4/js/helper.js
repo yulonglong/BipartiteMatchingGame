@@ -4,16 +4,28 @@ function drawStraightLine(l,r, weight) {
 	var ctx=c.getContext("2d");
 
 	var numberOfImages = Math.max(numberOfImagesLeft,numberOfImagesRight);
+	var imageHeight = c.height/numberOfImages;
 
 	var leftX = 0;
-	var leftY = (c.height/numberOfImages/2) + (l*c.height/numberOfImages);
+	var leftY = (imageHeight/2) + (l*imageHeight);
 	var rightX = c.width;
-	var rightY = (c.height/numberOfImages/2) + (r*c.height/numberOfImages);
+	var rightY = (imageHeight/2) + (r*imageHeight);
 	
 	ctx.beginPath();
 	ctx.moveTo(leftX,leftY);
 	ctx.lineTo(rightX,rightY);
 	ctx.stroke();
+
+
+	// Calculate where to draw the weights
+	var c = leftY;
+	var m = (rightY-leftY)/(rightX-leftX);
+	var x = (leftX+rightX)/3;
+	var y = m*x+c;
+
+	ctx.font="20px Roboto";
+	if (window.innerWidth <= 480) ctx.font="15px Roboto";
+	ctx.fillText("s" + weight,x,y);
 }
 
 // static 
@@ -22,16 +34,31 @@ function drawBezierCurve(l,r, weight) {
 	var ctx=c.getContext("2d");
 
 	var numberOfImages = Math.max(numberOfImagesLeft,numberOfImagesRight);
+	var imageHeight = c.height/numberOfImages;
 
 	var leftX = 0;
-	var leftY = (c.height/numberOfImages/2) + (l*c.height/numberOfImages);
+	var leftY = (imageHeight/2) + (l*imageHeight);
 	var rightX = c.width;
-	var rightY = (c.height/numberOfImages/2) + (r*c.height/numberOfImages);
+	var rightY = (imageHeight/2) + (r*imageHeight);
+
+	var bezierOffset = imageHeight/2;
+	if (l>r) bezierOffset = -1*(imageHeight/2);
 	
 	ctx.beginPath();
 	ctx.moveTo(leftX,leftY);
-	ctx.bezierCurveTo(leftX+c.width/2,leftY,rightX-c.width/2,rightY,rightX,rightY);
+	ctx.bezierCurveTo(leftX+c.width/2,leftY+bezierOffset,rightX-c.width/2,rightY-bezierOffset,rightX,rightY);
 	ctx.stroke();
+
+	// Calculate where to draw the weights
+	var c = leftY;
+	var m = (rightY-leftY)/(rightX-leftX);
+	var x = (leftX+rightX)*2/3;
+	var y = m*x+c;
+	var yOffset = (l-r)*0.11*imageHeight;
+
+	ctx.font="20px Roboto";
+	if (window.innerWidth <= 480) ctx.font="15px Roboto";
+	ctx.fillText("b" + weight,x,y-yOffset);
 }
 
 // static

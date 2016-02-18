@@ -99,7 +99,7 @@ function generateWorksheet() {
 	for (var i = 0; i < numberOfImagesLeft; i++) {
 		for (var j = 0; j < numberOfImagesRight; j++) { 
 			lineArray[i][j] = true;
-			weightArray[i][j] = 10;
+			weightArray[i][j] = i;
 		}
 	}
 
