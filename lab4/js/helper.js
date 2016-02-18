@@ -1,3 +1,17 @@
+function setContextRed() {
+	var c=document.getElementById("cvs");
+	var ctx=c.getContext("2d");
+	ctx.lineWidth = 4;
+	ctx.strokeStyle = '#ff0000';
+}
+
+function setContextDefault() {
+	var c=document.getElementById("cvs");
+	var ctx=c.getContext("2d");
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = '#220000';
+}
+
 // static
 function drawStraightLine(l,r, weight) {
 	var c=document.getElementById("cvs");
@@ -62,20 +76,24 @@ function drawBezierCurve(l,r, weight) {
 }
 
 // static
-function drawLine(lineArr, weightArr, nLeft, nRight) {
+function drawLine(lineArr, weightArr, selectedEdgeArr, nLeft, nRight) {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
 	ctx.clearRect(0, 0, c.width, c.height);
 
+	setContextDefault();
+
 	for(var i=0;i<nLeft;i++) {
 		for(var j=0;j<nRight;j++) {
 			if (lineArr[i][j]) {
+				if (selectedEdgeArr[i][j]) setContextRed();
 				if (Math.abs(i-j) <= 1) {
 					drawStraightLine(i, j, weightArr[i][j]);
 				}
 				else {
 					drawBezierCurve(i, j, weightArr[i][j]);
 				}
+				setContextDefault();
 			}
 		}
 	}

@@ -15,6 +15,9 @@ var selectedFilename = "";
 var selectedIndex = -1;
 var lineArray = [[false,false]];
 var weightArray = [[0,0]];
+var selectedEdgeArray = [[false,false]];
+var totalScore = 0;
+var totalPair = 0;
 
 initializeArray();
 generateWorksheet();
@@ -22,14 +25,19 @@ generateWorksheet();
 function initializeArray() {
 	lineArray = new Array(10);
 	weightArray = new Array(10);
+	selectedEdgeArray = new Array(10);
 	for (var i = 0; i < 10; i++) {
 		lineArray[i] = new Array(10);
 		weightArray[i] = new Array(10);
+		selectedEdgeArray[i] = new Array(10);
 		for (var j = 0; j < 10; j++) {
 			lineArray[i][j] = false;
 			weightArray[i][j] = 0;
+			selectedEdgeArray[i][j] = false;
 		}
 	}
+	totalScore = 0;
+	totalPair = 0;
 }
 
 function generateWorksheet() {
@@ -121,7 +129,7 @@ function generateWorksheet() {
 	ctx.clearRect(0, 0, c.width, c.height);
 	// end canvas size setting
 
-	drawLine(lineArray, weightArray, numberOfImagesLeft, numberOfImagesRight);
+	drawLine(lineArray, weightArray, selectedEdgeArray, numberOfImagesLeft, numberOfImagesRight);
 
 	startTime = new Date().getTime();
 }
@@ -132,102 +140,92 @@ function onClickLeft(imageName, index) {
 	numberOfClicks++;
 	if (leftSelected) {
 		// $('#left'+selectedFilename).removeClass('leftSelected');
-		$('.mainMsg').html('Invalid choice, please select an image from the right column.');
+		$('.mainMsg').html('Invalid choice, please select a toast from the right column.');
 		return;
 	}
 	if (!rightSelected) {
 		leftSelected = true;
 		selectedFilename = imageName;
-		$('.mainMsg').html('Select an image from the right column.');
+		$('.mainMsg').html('Select a toast from the right column.');
 		$('#left'+selectedFilename).addClass('leftSelected');
 		$('#left'+selectedFilename).removeClass('unselected');
 		selectedIndex = index;
 		return;
 	}
 
-	// If correct
-	if (imageName == selectedFilename) {
-		$('.mainMsg').html("<p><b style='color: green;'>Correct match.</b></p>");
+	// If there is an edge
+	if (lineArray[index][selectedIndex]) {
+		selectedEdgeArray[index][selectedIndex] = true;
+		totalScore += weightArray[index][selectedIndex];
+		totalPair++;
+
+		drawLine(lineArray, weightArray, selectedEdgeArray, numberOfImagesLeft, numberOfImagesRight);
+
+		$('.mainMsg').html("<p><b>Edge selected.</b></p>");
+		$('.msg').html(totalPair + " raccoon(s) have eaten. Current score : " + totalScore);
 		$('#left'+imageName).addClass('leftSelected correctSelected');
+		$('#left'+imageName).removeClass('unselected');
 		$('#right'+selectedFilename).addClass('correctSelected');
 
 		$('#left'+imageName).attr('onClick','');
 		$('#right'+selectedFilename).attr('onClick','');
-
-		match[index] = selectedIndex;
-		drawLine(match);
-
-		correctImages += 1;
-		if (correctImages == numberOfImages) {
-			finishedWorksheet();
-		}
 	}
 	else {
-		numberOfWrongs++;
-		$('.mainMsg').html("<p><b style='color: red;'>Wrong match.</b></p>");
+		$('.mainMsg').html("<p><b style='color: red;'>Wrong selection, no edge found.</b></p>");
 		$('#right'+selectedFilename).removeClass('rightSelected');
 		$('#right'+selectedFilename).addClass('unselected');
-		// if (numberOfWrongs >= maxNumberOfWrongs) {
-		// 	failedWorksheet();
-		// }
 	}
 
-	leftSelected = "";
+	leftSelected = false;
 	rightSelected = false;
 	selectedFilename = "";
-	leftSelectedIndex = -1;
-	rightSelectedIndex = -1;
+	selectedIndex = -1;
 }
 
 function onClickRight(imageName, index) {
 	numberOfClicks++;
 	if (rightSelected) {
 		// $('#right'+selectedFilename).removeClass('rightSelected');
-		$('.mainMsg').html('Invalid choice, please select an image from the left column.');
+		$('.mainMsg').html('Invalid choice, please select a raccoon from the left column.');
 		return;
 	}
 	if (!leftSelected) {
 		rightSelected = true;
 		selectedFilename = imageName;
-		$('.mainMsg').html('Select an image from the left column.');
+		$('.mainMsg').html('Select a raccoon from the left column.');
 		$('#right'+selectedFilename).addClass('rightSelected');
 		$('#right'+selectedFilename).removeClass('unselected');
 		selectedIndex = index;
 		return;
 	}
 
-	// If correct
-	if (imageName == selectedFilename) {
-		$('.mainMsg').html("<p><b style='color: green;'>Correct match.</b></p>");
+	// If there is an edge
+	if (lineArray[selectedIndex][index]) {
+		selectedEdgeArray[selectedIndex][index] = true;
+		totalScore += weightArray[index][selectedIndex];
+		totalPair++;
+
+		drawLine(lineArray, weightArray, selectedEdgeArray, numberOfImagesLeft, numberOfImagesRight);
+
+		$('.mainMsg').html("<p><b>Edge selected.</b></p>");
+		$('.msg').html(totalPair + " raccoon(s) have eaten. Current score : " + totalScore);
 		$('#right'+imageName).addClass('rightSelected correctSelected');
+		$('#right'+imageName).removeClass('unselected');
 		$('#left'+selectedFilename).addClass('correctSelected');
 
 		$('#right'+imageName).attr('onClick','');
 		$('#left'+selectedFilename).attr('onClick','');
-
-		match[selectedIndex] = index;
-		drawLine(match);
-
-		correctImages += 1;
-		if (correctImages == numberOfImages) {
-			finishedWorksheet();
-		}
 	}
 	else {
-		numberOfWrongs++;
 		$('.mainMsg').html("<p><b style='color: red;'>Wrong match.</b></p>");
 		$('#left'+selectedFilename).removeClass('leftSelected');
 		$('#left'+selectedFilename).addClass('unselected');
-		// if (numberOfWrongs >= maxNumberOfWrongs) {
-		// 	failedWorksheet();
-		// }
 	}
 
 	leftSelected = false;
 	rightSelected = false;
 	selectedFilename = "";
-	leftSelectedIndex = -1;
-	rightSelectedIndex = -1;
+	selectedIndex = -1;
 }
 
 function finishedWorksheet() {
