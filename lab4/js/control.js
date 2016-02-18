@@ -1,11 +1,12 @@
-var numberOfImages = 0;
+var numberOfImagesLeft = 0;
+var numberOfImagesRight = 0;
 var correctImages = 0;
 var startTime;
 var numberOfClicks = 0;
 var numberOfWrongs = 0;
 var maxNumberOfWrongs = 0;
 
-var raccoonFilename = ["raccoon1", "raccoon2", "raccoon3", "raccoon4",
+var filenameRaccoon = ["raccoon1", "raccoon2", "raccoon3", "raccoon4",
 "raccoon5", "raccoon6", "raccoon7", "raccoon8", "raccoon9",
 "raccoon10", "raccoon11", "raccoon12"];
 var filename = ["toast1", "toast2", "toast3", "toast4",
@@ -29,6 +30,8 @@ function drawStraightLine(l,r) {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
 
+	var numberOfImages = Math.max(numberOfImagesLeft,numberOfImagesRight);
+
 	var leftX = 0;
 	var leftY = (c.height/numberOfImages/2) + (l*c.height/numberOfImages);
 	var rightX = c.width;
@@ -43,6 +46,8 @@ function drawStraightLine(l,r) {
 function drawBezierCurve(l,r) {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
+
+	var numberOfImages = Math.max(numberOfImagesLeft,numberOfImagesRight);
 
 	var leftX = 0;
 	var leftY = (c.height/numberOfImages/2) + (l*c.height/numberOfImages);
@@ -60,7 +65,7 @@ function drawLine(matches) {
 	var ctx=c.getContext("2d");
 	ctx.clearRect(0, 0, c.width, c.height);
 
-	for(var i=0;i<numberOfImages;i++) {
+	for(var i=0;i<numberOfImagesLeft;i++) {
 		if (matches[i] == -1) continue;
 
 		if (Math.abs(i-matches[i]) <= 1) {
@@ -82,63 +87,83 @@ function isValidShuffle(leftFilename, rightFilename) {
 function generateWorksheet() {
 	$('.msg').html("");
 	
-	var n = $('#numberOfImages').val();
-	if (n == null) n = 4;
+	var nLeft = $('#numberOfImagesLeft').val();
+	if (nLeft == null) nLeft = 4;
+	if ((nLeft < 2) || (nLeft > 10)) {
+		$('.msg').html('<p>Please enter a number between 2 and 10 !</p>');
+		$('.msg').css('color','red');
+		return;
+	}
 
-	if ((n < 2) || (n > 12)) {
-		$('.msg').html('<p>Please enter a number between 2 and 12 !</p>');
+	var nRight = $('#numberOfImagesRight').val();
+	if (nRight == null) nRight = 4;
+	if ((nRight < 2) || (nRight > 10)) {
+		$('.msg').html('<p>Please enter a number between 2 and 10 !</p>');
 		$('.msg').css('color','red');
 		return;
 	}
 
 	correctImages = 0;
-	numberOfImages = n;
-	numberOfClicks = 0;
-	numberOfWrongs = 0;
-	maxNumberOfWrongs = n;
+	numberOfImagesLeft = nLeft;
+	numberOfImagesRight = nRight;
 
 	$('#ulLeft').empty();
 	$('#ulRight').empty();
 
 	var leftFilename = [];
 	var rightFilename = [];
-	for(var i=0;i<n;i++){
-		leftFilename[i] = filename[i];
+	for(var i=0;i<numberOfImagesLeft;i++){
+		leftFilename[i] = filenameRaccoon[i];
+	}
+	for(var i=0;i<numberOfImagesRight;i++){
 		rightFilename[i] = filename[i];
 	}
 
 	shuffle(leftFilename);
 	shuffle(rightFilename);
 
-	// Disable same images to appear on the same row
-	while (!isValidShuffle(leftFilename,rightFilename)) {
-		shuffle(leftFilename);
-		shuffle(rightFilename);
+	var oneImgIdLeft, oneImgIdRight;
+
+	for(var i=0;i<numberOfImagesLeft;i++){
+		oneImgIdLeft = "left"+leftFilename[i];
+		$('#ulLeft').append('<div><img class="cartoon unselected left" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\','+i+')"/></div>');
+	}
+	if (numberOfImagesLeft < numberOfImagesRight) {
+		for(var i=0;i<numberOfImagesRight-numberOfImagesLeft;i++){
+			$('#ulLeft').append('<div><img class="cartoonNoHover" src="img/blank.png"/></div>');
+		}
 	}
 
-	var oneImgId;
-
-	for(var i=0;i<n;i++){
-		oneImgId = "left"+leftFilename[i];
-		$('#ulLeft').append('<div><img class="cartoon unselected left" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\','+i+')"/></div>');
+	for(var i=0;i<numberOfImagesRight;i++){
+		oneImgIdRight = "right"+rightFilename[i];
 		$('#ulRight').append('<div><img class="cartoon unselected right" id="right'+ rightFilename[i] +'" src="img/' + rightFilename[i] + '.png"  onClick="onClickRight(\'' + rightFilename[i] + '\','+i+')"/></div>');
 	}
+	if (numberOfImagesLeft > numberOfImagesRight) {
+		for(var i=0;i<numberOfImagesLeft-numberOfImagesRight;i++){
+			$('#ulRight').append('<div><img class="cartoonNoHover" src="img/blank.png"/></div>');
+		}
+	}
 
-	$('#generate').hide();
-	$('#main').show();
+	// $('#main').show();
 	$('.mainMsg').html('Select an image to start.');
 
-	for (var i = 0; i < numberOfImages; i++) match[i] = -1;
+	for (var i = 0; i < numberOfImagesLeft; i++) match[i] = 1;
 
+	// Decide on the size of canvas based on the image size
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
 
+	var oneImgId = oneImgIdRight;
+	if (numberOfImagesLeft > numberOfImagesRight) oneImgId = oneImgIdRight;
 	var imgRacoon = document.getElementById(oneImgId);
 
 	c.width  = imgRacoon.clientWidth*1.5;
-	c.height = imgRacoon.clientWidth*n;
+	c.height = imgRacoon.clientWidth*Math.max(numberOfImagesLeft,numberOfImagesRight);
 	
 	ctx.clearRect(0, 0, c.width, c.height);
+	// end canvas size setting
+
+	drawLine(match);
 
 	startTime = new Date().getTime();
 }

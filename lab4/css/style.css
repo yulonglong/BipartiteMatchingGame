@@ -26,6 +26,14 @@ ul {
 	list-style-type: none;
 }
 
+img.cartoonNoHover {
+	vertical-align: middle;
+	width: 100%;
+	height: 100%;
+	max-width: 200px;
+	max-height: 200px;
+}
+
 img.cartoon {
 	vertical-align: middle;
 	width: 100%;
