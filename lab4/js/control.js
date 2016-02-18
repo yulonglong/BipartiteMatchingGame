@@ -1,14 +1,8 @@
-var numberOfImagesLeft = 0;
-var numberOfImagesRight = 0;
-var correctImages = 0;
-var startTime;
-var numberOfClicks = 0;
-var numberOfWrongs = 0;
-var maxNumberOfWrongs = 0;
-
 var filenameRaccoon = ["raccoon1", "raccoon2", "raccoon3", "raccoon4", "raccoon5", "raccoon6", "raccoon7", "raccoon8", "raccoon9", "raccoon10", "raccoon11", "raccoon12"];
 var filename = ["toast1", "toast2", "toast3", "toast4", "toast5", "toast6", "toast7", "toast8", "toast9", "toast10", "toast11", "toast12"];
 
+var numberOfImagesLeft = 0;
+var numberOfImagesRight = 0;
 var leftSelected = false;
 var rightSelected = false;
 var selectedFilename = "";
@@ -226,33 +220,4 @@ function onClickRight(imageName, index) {
 	rightSelected = false;
 	selectedFilename = "";
 	selectedIndex = -1;
-}
-
-function finishedWorksheet() {
-	var endTime = new Date().getTime();
-	var timeTaken = endTime - startTime;
-	var seconds = Math.floor(timeTaken/1000);
-	var minutes = Math.floor(seconds/60);
-	var seconds = Math.floor(seconds%60);
-	// $('#main').hide();
-	$('#generate').show();
-	$('.msg').html("<p><b style='color: green;'>Worksheet completed!</b></p>");
-	// $('.msg').html("<p><b style='color: green;'>Worksheet completed!</b></p>"+
-	// 	"<p>Time taken : "+minutes+ " minutes "+seconds+ " seconds</p>"+
-	// 	"<p>Number of clicks " + numberOfClicks + " <i>(perfect = "+ numberOfImages*2 +")</i></p>"+
-	// 	"<p>Select worksheet size and click 'Generate Worksheet'.</p>");
-}
-
-function failedWorksheet() {
-	var endTime = new Date().getTime();
-	var timeTaken = endTime - startTime;
-	var seconds = Math.floor(timeTaken/1000);
-	var minutes = Math.floor(seconds/60);
-	var seconds = Math.floor(seconds%60);
-	// $('#main').hide();
-	$('#generate').show();
-	$('.msg').html("<p><b style='color: red;'>Worksheet failed!</b></p>"+
-		"<p>Time taken : "+minutes+ " minutes "+seconds+ " seconds</p>"+
-		"<p>Number of wrong matches " + numberOfWrongs + "</p>"+
-		"<p>Select worksheet size and click 'Generate Worksheet'.</p>");
 }
