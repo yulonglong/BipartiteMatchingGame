@@ -131,7 +131,6 @@ function generateWorksheet() {
 
 
 function onClickLeft(imageName, index) {
-	numberOfClicks++;
 	if (leftSelected) {
 		// $('#left'+selectedFilename).removeClass('leftSelected');
 		$('.mainMsg').html('Invalid choice, please select a toast from the right column.');
@@ -177,7 +176,6 @@ function onClickLeft(imageName, index) {
 }
 
 function onClickRight(imageName, index) {
-	numberOfClicks++;
 	if (rightSelected) {
 		// $('#right'+selectedFilename).removeClass('rightSelected');
 		$('.mainMsg').html('Invalid choice, please select a raccoon from the left column.');
