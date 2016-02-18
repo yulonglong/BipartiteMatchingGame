@@ -30,16 +30,16 @@ img.cartoonNoHover {
 	vertical-align: middle;
 	width: 100%;
 	height: 100%;
-	max-width: 200px;
-	max-height: 200px;
+	max-width: 150px;
+	max-height: 150px;
 }
 
 img.cartoon {
 	vertical-align: middle;
 	width: 100%;
 	height: 100%;
-	max-width: 200px;
-	max-height: 200px;
+	max-width: 150px;
+	max-height: 150px;
 	transition: all .2s ease-in-out;
 }
 
@@ -93,13 +93,31 @@ fieldset {
 		text-align: center;
 		width: 100%
 	}
+	.leftTd {
+		width: 30%;
+	}
+	.rightTd {
+		width: 30%;
+	}
+	.middleTd {
+		width: 40%;
+	}
 }
 
 @media screen and (min-width: 480px) {
 	#theTable {
 		text-align: center;
+		width: 75%;
+		max-width: 1000px;
+	}
+	.leftTd {
+		width: 25%;
+	}
+	.rightTd {
+		width: 25%;
+	}
+	.middleTd {
 		width: 50%;
-		max-width: 500px;
 	}
 }
 

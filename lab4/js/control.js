@@ -111,7 +111,11 @@ function generateWorksheet() {
 	if (numberOfImagesLeft > numberOfImagesRight) oneImgId = oneImgIdRight;
 	var imgRacoon = document.getElementById(oneImgId);
 
-	c.width  = imgRacoon.clientWidth*1.5;
+	var multiplier = window.innerWidth/360.0;
+	// if (window.innerWidth <= 480) multiplier = 1.3333333;
+	if (multiplier > 4) multiplier = 3;
+	if (multiplier < 1) multiplier = 1.5;
+	c.width  = imgRacoon.clientWidth*multiplier;
 	c.height = imgRacoon.clientWidth*Math.max(numberOfImagesLeft,numberOfImagesRight);
 	
 	ctx.clearRect(0, 0, c.width, c.height);
