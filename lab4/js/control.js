@@ -219,7 +219,7 @@ function generateWorksheet() {
 	}
 
 	// $('#main').show();
-	$('.mainMsg').html('Select an image to start.');
+	$('.mainMsg').html('Feed as many raccoons as possible with the highest score.');
 
 	generateGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
 
