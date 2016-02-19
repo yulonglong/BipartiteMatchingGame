@@ -16,11 +16,6 @@ int slackx[N]; //slackx[y] such a vertex, that
 	// l(slackx[y]) + l(y) - w(slackx[y],y) = slack[y]
 int pprev[N]; //array for memorizing alternating paths
 
-
-int augmentCount = 0;
-int addToTreeCount = 0;
-int updateLabelsCount = 0;
-
 void add_to_tree(int x, int pprevx);
 void update_labels();
 
@@ -35,7 +30,6 @@ void init_labels()
 
 void augment() //main function of the algorithm
 {
-	augmentCount++;
 	// printf("here\n");
 	if (max_match == n) return; //check wether matching is already perfect
 	// printf("here2\n");
@@ -78,7 +72,6 @@ void augment() //main function of the algorithm
 		if (y < n) break; //augmenting path found!
 
 		update_labels(); //augmenting path not found, so improve labeling
-		printf("rd<wr\n");
 		wr = rd = 0; 
 		for (y = 0; y < n; y++) {
 			//in this cycle we add edges that were added to the equality graph as a
@@ -118,7 +111,6 @@ void augment() //main function of the algorithm
 
 void update_labels()
 {
-	updateLabelsCount++;
 	int x, y, delta = INF; //init delta as infinity
 	for (y = 0; y < n; y++) //calculate delta using slack
 	if (!T[y])
@@ -136,7 +128,6 @@ void add_to_tree(int x, int pprevx)
 //x - current vertex,pprevx - vertex from X before x in the alternating path,
 //so we add edges (pprevx, xy[x]), (xy[x], x)
 {
-	addToTreeCount++;
 	S[x] = true; //add x to S
 	pprev[x] = pprevx; //we need this when augmenting
 	for (int y = 0; y < n; y++) //update slacks, because we add new vertex to S
@@ -222,11 +213,6 @@ int main() {
 		}
 
 		printf("==== path end =====\n");
-
-		printf("Augment count : %d\n", augmentCount);
-		printf("UpdateLabels count : %d\n", updateLabelsCount);
-		printf("AddToTree count : %d\n", addToTreeCount);
-		printf("==== count end =====\n");
 
 		while (res < 0) res += INF;
 		printf("%d\n", res);
