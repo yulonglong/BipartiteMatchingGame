@@ -17,6 +17,10 @@ int slackx[N]; //slackx[y] such a vertex, that
 int pprev[N]; //array for memorizing alternating paths
 
 
+int augmentCount = 0;
+int addToTreeCount = 0;
+int updateLabelsCount = 0;
+
 void add_to_tree(int x, int pprevx);
 void update_labels();
 
@@ -31,6 +35,7 @@ void init_labels()
 
 void augment() //main function of the algorithm
 {
+	augmentCount++;
 	// printf("here\n");
 	if (max_match == n) return; //check wether matching is already perfect
 	// printf("here2\n");
@@ -40,86 +45,80 @@ void augment() //main function of the algorithm
 	memset(S, false, sizeof(S)); //init set S
 	memset(T, false, sizeof(T)); //init set T
 	memset(pprev, -1, sizeof(pprev)); //init set pprev - for the alternating tree
-	for (x = 0; x < n; x++) //finding root of the tree
-	if (xy[x] == -1)
-	{
-	q[wr++] = root = x;
-	pprev[x] = -2;
-	S[x] = true;
-	break;
+	for (x = 0; x < n; x++) {//finding root of the tree
+		if (xy[x] == -1) {
+			q[wr++] = root = x;
+			pprev[x] = -2;
+			S[x] = true;
+			break;
+		}
 	}
 
-	for (y = 0; y < n; y++) //initializing slack array
-	{
-	slack[y] = lx[root] + ly[y] - cost[root][y];
-	slackx[y] = root;
+	for (y = 0; y < n; y++) { //initializing slack array
+		slack[y] = lx[root] + ly[y] - cost[root][y];
+		slackx[y] = root;
 	}
 	//second part of augment() function
-	while (true) //main cycle
-	{
+	while (true) { //main cycle
 		// printf("test\n");
-	while (rd < wr) //building tree with bfs cycle
-	{
-	x = q[rd++]; //current vertex from X part
-	for (y = 0; y < n; y++) //iterate through all edges in equality graph
-	if (cost[x][y] == lx[x] + ly[y] && !T[y])
-	{
-	if (yx[y] == -1) break; //an exposed vertex in Y found, so
-	//augmenting path exists!
-	T[y] = true; //else just add y to T,
-	q[wr++] = yx[y]; //add vertex yx[y], which is matched
-	//with y, to the queue
-	add_to_tree(yx[y], x); //add edges (x,y) and (y,yx[y]) to the tree
-	}
-	if (y < n) break; //augmenting path found!
-	}
-	if (y < n) break; //augmenting path found!
+		while (rd < wr) { //building tree with bfs cycle
+			x = q[rd++]; //current vertex from X part
+			for (y = 0; y < n; y++) { //iterate through all edges in equality graph
+				if (cost[x][y] == lx[x] + ly[y] && !T[y]) {
+					if (yx[y] == -1) break; //an exposed vertex in Y found, so
+					//augmenting path exists!
+					T[y] = true; //else just add y to T,
+					q[wr++] = yx[y]; //add vertex yx[y], which is matched
+					//with y, to the queue
+					add_to_tree(yx[y], x); //add edges (x,y) and (y,yx[y]) to the tree
+				}
+			}
+			if (y < n) break; //augmenting path found!
+		}
+		if (y < n) break; //augmenting path found!
 
-	update_labels(); //augmenting path not found, so improve labeling
-	wr = rd = 0; 
-	for (y = 0; y < n; y++) 
-	//in this cycle we add edges that were added to the equality graph as a
-	//result of improving the labeling, we add edge (slackx[y], y) to the tree if
-	//and only if !T[y] && slack[y] == 0, also with this edge we add another one
-	//(y, yx[y]) or augment the matching, if y was exposed
-	if (!T[y] && slack[y] == 0)
-	{
-	if (yx[y] == -1) //exposed vertex in Y found - augmenting path exists!
-	{
-	x = slackx[y];
-	break;
-	}
-	else
-	{
-	T[y] = true; //else just add y to T,
-	if (!S[yx[y]]) 
-	{
-	q[wr++] = yx[y]; //add vertex yx[y], which is matched with
-	//y, to the queue
-	add_to_tree(yx[y], slackx[y]); //and add edges (x,y) and (y,
-	//yx[y]) to the tree
-	}
-	}
-	}
-	if (y < n) break; //augmenting path found!
+		update_labels(); //augmenting path not found, so improve labeling
+		printf("rd<wr\n");
+		wr = rd = 0; 
+		for (y = 0; y < n; y++) {
+			//in this cycle we add edges that were added to the equality graph as a
+			//result of improving the labeling, we add edge (slackx[y], y) to the tree if
+			//and only if !T[y] && slack[y] == 0, also with this edge we add another one
+			//(y, yx[y]) or augment the matching, if y was exposed
+			if (!T[y] && slack[y] == 0) {
+				if (yx[y] == -1) { //exposed vertex in Y found - augmenting path exists!
+					x = slackx[y];
+					break;
+				}
+				else {
+					T[y] = true; //else just add y to T,
+					if (!S[yx[y]]) {
+						q[wr++] = yx[y]; //add vertex yx[y], which is matched with
+						//y, to the queue
+						add_to_tree(yx[y], slackx[y]); //and add edges (x,y) and (y,
+						//yx[y]) to the tree
+					}
+				}
+			}
+		}
+		if (y < n) break; //augmenting path found!
 	}
 
-	if (y < n) //we found augmenting path!
-	{
-	max_match++; //increment matching
-	//in this cycle we inverse edges along augmenting path
-	for (int cx = x, cy = y, ty; cx != -2; cx = pprev[cx], cy = ty)
-	{
-	ty = xy[cx];
-	yx[cy] = cx;
-	xy[cx] = cy;
-	}
-	augment(); //recall function, go to step 1 of the algorithm
+	if (y < n) { //we found augmenting path!
+		max_match++; //increment matching
+		//in this cycle we inverse edges along augmenting path
+		for (int cx = x, cy = y, ty; cx != -2; cx = pprev[cx], cy = ty) {
+			ty = xy[cx];
+			yx[cy] = cx;
+			xy[cx] = cy;
+		}
+		augment(); //recall function, go to step 1 of the algorithm
 	}
 }//end of augment() function
 
 void update_labels()
 {
+	updateLabelsCount++;
 	int x, y, delta = INF; //init delta as infinity
 	for (y = 0; y < n; y++) //calculate delta using slack
 	if (!T[y])
@@ -137,6 +136,7 @@ void add_to_tree(int x, int pprevx)
 //x - current vertex,pprevx - vertex from X before x in the alternating path,
 //so we add edges (pprevx, xy[x]), (xy[x], x)
 {
+	addToTreeCount++;
 	S[x] = true; //add x to S
 	pprev[x] = pprevx; //we need this when augmenting
 	for (int y = 0; y < n; y++) //update slacks, because we add new vertex to S
@@ -206,13 +206,28 @@ int main() {
 				cost[i][x-n] = y;
 			}
 		}
-		// for (int i=0; i<n; i++) {
-		// 	for (int j=0; j<m; j++) {
-		// 		printf("%d ", cost[i][j]);
-		// 	}
-		// 	printf("\n");
-		// }
+		printf("\n==== cost begin =====\n");
+		for (int i=0; i<n; i++) {
+			for (int j=0; j<m; j++) {
+				printf("%d->%d : %d\n", i,j,cost[i][j]);
+			}
+		}
+
+		printf("\n==== cost end =====\n");
+
 		int res = hungarian(max(n, m));
+
+		for (int i=0; i<n; i++) {
+			printf("%d->%d : %d\n", i, xy[i], cost[i][xy[i]]);
+		}
+
+		printf("==== path end =====\n");
+
+		printf("Augment count : %d\n", augmentCount);
+		printf("UpdateLabels count : %d\n", updateLabelsCount);
+		printf("AddToTree count : %d\n", addToTreeCount);
+		printf("==== count end =====\n");
+
 		while (res < 0) res += INF;
 		printf("%d\n", res);
 	}
