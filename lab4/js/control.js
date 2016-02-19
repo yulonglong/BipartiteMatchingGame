@@ -234,7 +234,7 @@ function generateWorksheet() {
 	var multiplier = window.innerWidth/360.0;
 	// if (window.innerWidth <= 480) multiplier = 1.3333333;
 	if (multiplier > 4) multiplier = 3;
-	if (multiplier < 1) multiplier = 1.5;
+	if (multiplier < 1.5) multiplier = 1.5;
 	c.width  = imgRacoon.clientWidth*multiplier;
 	c.height = imgRacoon.clientWidth*Math.max(numberOfImagesLeft,numberOfImagesRight);
 	
