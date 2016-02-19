@@ -34,6 +34,38 @@ function initializeArray() {
 	totalPair = 0;
 }
 
+// static
+function generateGraphAJAX(left, right) {
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else {
+		// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			var jsonArray = xmlhttp.responseText;
+			var jsArray = JSON.parse(jsonArray);
+
+			var arrayLength = jsArray["E"].length;
+			for (var i = 0; i < arrayLength; i++) {
+				var leftIndex = jsArray["E"][i][0];
+				var rightIndex = jsArray["E"][i][1];
+				var weight = jsArray["E"][i][2];
+				lineArray[leftIndex][rightIndex] = true;
+				weightArray[leftIndex][rightIndex] = weight;
+				// alert(jsArray["E"][i][0] + " " + jsArray["E"][i][1] + " " + jsArray["E"][i][2]);
+			}
+			drawLine(lineArray, weightArray, selectedEdgeArray, numberOfImagesLeft, numberOfImagesRight);
+			// $('.msg').html(jsonArray);
+		}
+	};
+	xmlhttp.open("GET","matching.php?cmd=generate&N="+left+"&M="+right,true);
+	xmlhttp.send();
+}
+
 function generateWorksheet() {
 	$('.msg').html("");
 	
@@ -54,8 +86,8 @@ function generateWorksheet() {
 	}
 
 	correctImages = 0;
-	numberOfImagesLeft = nLeft;
-	numberOfImagesRight = nRight;
+	numberOfImagesLeft = parseInt(nLeft);
+	numberOfImagesRight = parseInt(nRight);
 
 	$('#ulLeft').empty();
 	$('#ulRight').empty();
@@ -78,6 +110,7 @@ function generateWorksheet() {
 		oneImgIdLeft = "left"+leftFilename[i];
 		$('#ulLeft').append('<div><img class="cartoon unselected left" id="left'+ leftFilename[i] +'" src="img/' + leftFilename[i] + '.png"  onClick="onClickLeft(\''+ leftFilename[i] + '\','+i+')"/></div>');
 	}
+
 	if (numberOfImagesLeft < numberOfImagesRight) {
 		for(var i=0;i<numberOfImagesRight-numberOfImagesLeft;i++){
 			$('#ulLeft').append('<div><img class="cartoonNoHover" src="img/blank.png"/></div>');
@@ -98,12 +131,13 @@ function generateWorksheet() {
 	$('.mainMsg').html('Select an image to start.');
 
 	initializeArray();
-	for (var i = 0; i < numberOfImagesLeft; i++) {
-		for (var j = 0; j < numberOfImagesRight; j++) { 
-			lineArray[i][j] = true;
-			weightArray[i][j] = i;
-		}
-	}
+	generateGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
+	// for (var i = 0; i < numberOfImagesLeft; i++) {
+	// 	for (var j = 0; j < numberOfImagesRight; j++) { 
+	// 		lineArray[i][j] = true;
+	// 		weightArray[i][j] = i;
+	// 	}
+	// }
 
 	// Decide on the size of canvas based on the image size
 	var c=document.getElementById("cvs");
