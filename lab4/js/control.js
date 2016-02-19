@@ -91,7 +91,7 @@ function generateGraphAJAX(left, right) {
 				// alert(jsArray["E"][i][0] + " " + jsArray["E"][i][1] + " " + jsArray["E"][i][2]);
 			}
 			drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
-			// $('.msg').html(jsonArray);
+			// $('.msg').html(graphJson);
 		}
 	};
 	xmlhttp.open("GET","matching.php?cmd=generate&N="+left+"&M="+right,true);
@@ -115,7 +115,8 @@ function solveGraphAJAX() {
 			solveGraph();
 		}
 	};
-	xmlhttp.open("GET","http://cs3226.comp.nus.edu.sg/matching.php?cmd=solve&graph="+graphJson,true);
+	// xmlhttp.open("GET","http://cs3226.comp.nus.edu.sg/matching.php?cmd=solve&graph="+graphJson,true);
+	xmlhttp.open("GET","matching.php?cmd=solve&graph="+graphJson,true);
 	xmlhttp.send();
 }
 

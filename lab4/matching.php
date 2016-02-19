@@ -1,4 +1,5 @@
 <?php
+require_once("Hungarian.php");
 
 if (!isset($_GET["cmd"])) {
 	echo "Please specify command!";
@@ -9,6 +10,9 @@ $cmd = $_GET["cmd"];
 
 if ($cmd == "generate") {
 	generateGraph();
+}
+else if ($cmd = "solve") {
+	solveGraph();
 }
 else {
 	echo "Sorry, command is not supported!";
@@ -44,6 +48,15 @@ function generateGraph() {
 	}
 
 	echo json_encode($graph);
+}
+
+function solveGraph() {
+	if (!isset($_GET["graph"])) {
+		echo "Please specify the current graph!";
+		return;
+	}
+	$h = new Hungarian($_GET["graph"]);
+	echo $h->solve();
 }
 
 
