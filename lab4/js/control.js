@@ -1,5 +1,7 @@
 var filenameRaccoon = ["raccoon1", "raccoon2", "raccoon3", "raccoon4", "raccoon5", "raccoon6", "raccoon7", "raccoon8", "raccoon9", "raccoon10", "raccoon11", "raccoon12"];
 var filename = ["toast1", "toast2", "toast3", "toast4", "toast5", "toast6", "toast7", "toast8", "toast9", "toast10", "toast11", "toast12"];
+var leftFilename = [];
+var rightFilename = [];
 
 var numberOfImagesLeft = 0;
 var numberOfImagesRight = 0;
@@ -115,6 +117,18 @@ function solveGraph() {
 		$('.msg').append("<br/>Congratulations! Your answer is optimal.");
 	}
 
+	for(var i=0;i<numberOfImagesLeft;i++){
+		var currId = "left"+leftFilename[i];
+		$('#'+currId).removeClass("cartoon unselected");
+		$('#'+currId).addClass("cartoonNoHover");
+		$('#'+currId).attr('onClick','');
+	}
+	for(var i=0;i<numberOfImagesRight;i++){
+		var currId = "right"+rightFilename[i];
+		$('#'+currId).removeClass("cartoon unselected");
+		$('#'+currId).addClass("cartoonNoHover");
+		$('#'+currId).attr('onClick','');
+	}
 }
 
 function generateWorksheet() {
@@ -141,8 +155,8 @@ function generateWorksheet() {
 	$('#ulLeft').empty();
 	$('#ulRight').empty();
 
-	var leftFilename = [];
-	var rightFilename = [];
+	leftFilename = [];
+	rightFilename = [];
 	for(var i=0;i<numberOfImagesLeft;i++){
 		leftFilename[i] = filenameRaccoon[i];
 	}
