@@ -72,15 +72,14 @@ function generateWorksheet() {
 	var nLeft = $('#numberOfImagesLeft').val();
 	if (nLeft == null) nLeft = 4;
 	if ((nLeft < 2) || (nLeft > 10)) {
-		$('.msg').html('<p>Please enter a number between 2 and 10 !</p>');
-		$('.msg').css('color','red');
+		$('.msg').html("<p style='color: red;'>Please enter a number between 2 and 10 !</p>");
 		return;
 	}
 
 	var nRight = $('#numberOfImagesRight').val();
 	if (nRight == null) nRight = 4;
 	if ((nRight < 2) || (nRight > 10)) {
-		$('.msg').html('<p>Please enter a number between 2 and 10 !</p>');
+		$('.msg').html("<p style='color: red;'>Please enter a number between 2 and 10 !</p>");
 		$('.msg').css('color','red');
 		return;
 	}
@@ -198,7 +197,7 @@ function onClickLeft(imageName, index) {
 		$('#right'+selectedFilename).attr('onClick','');
 	}
 	else {
-		$('.mainMsg').html("<p><b style='color: red;'>Wrong selection, no edge found.</b></p>");
+		$('.mainMsg').html("<p><b style='color: red;'>Invalid match, no edge found.</b></p>");
 		$('#right'+selectedFilename).removeClass('rightSelected');
 		$('#right'+selectedFilename).addClass('unselected');
 	}
@@ -228,7 +227,7 @@ function onClickRight(imageName, index) {
 	// If there is an edge
 	if (lineArray[selectedIndex][index]) {
 		selectedEdgeArray[selectedIndex][index] = true;
-		totalScore += weightArray[index][selectedIndex];
+		totalScore += weightArray[selectedIndex][index];
 		totalPair++;
 
 		drawLine(lineArray, weightArray, selectedEdgeArray, numberOfImagesLeft, numberOfImagesRight);
@@ -243,7 +242,7 @@ function onClickRight(imageName, index) {
 		$('#left'+selectedFilename).attr('onClick','');
 	}
 	else {
-		$('.mainMsg').html("<p><b style='color: red;'>Wrong match.</b></p>");
+		$('.mainMsg').html("<p><b style='color: red;'>Invalid match, no edge found.</b></p>");
 		$('#left'+selectedFilename).removeClass('leftSelected');
 		$('#left'+selectedFilename).addClass('unselected');
 	}
