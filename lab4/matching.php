@@ -59,5 +59,4 @@ function solveGraph() {
 	echo $h->solve();
 }
 
-
 ?>

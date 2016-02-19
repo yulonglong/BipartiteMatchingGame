@@ -1,13 +1,16 @@
 <?php
+// Maximum Weighted Bipartite Matching
+// Hungarian Algorithm
+
 define("MAX_N", 50);
 define("INFINITY", 10000000);
 
+// Test code to test and debug the algorithm
 // $json = '{"N":"4","M":"5","E":[[0,3,20],[2,3,6],[3,0,17],[3,1,8]]}';
 // $h = new Hungarian($json);
 // echo $h->solve();
 
 class Hungarian {
-
 	private $cost = array(); //cost matrix
 	private $n;
 	private $max_match; //n workers and n jobs
@@ -18,14 +21,11 @@ class Hungarian {
 	private $S = array();
 	private $T = array(); //sets S and T in algorithm
 	private $slack = array(); //as in the algorithm description
-	private $slackx = array(); //slackx[y] such a vertex, that
-	// l(slackx[y]) + l(y) - w(slackx[y],y) = slack[y]
+	private $slackx = array(); //slackx[y] such a vertex, that l(slackx[y]) + l(y) - w(slackx[y],y) = slack[y]
 	private $pprev = array(); //array for memorizing alternating paths
 
 	public function __construct($jsonArray) {
 		$phpArray = json_decode($jsonArray, true);
-		// echo var_dump($phpArray);
-		// echo "<br>";
 
 		$this->n = max($phpArray["N"],$phpArray["M"]);
 
@@ -38,26 +38,14 @@ class Hungarian {
 			$this->cost[$edge[0]][$edge[1]] = $edge[2];
 		}
 
-		// echo $this->n;
-		// echo "<br>";
-		// for($i = 0; $i < $this->n; $i++) {
-		// 	for($j = 0; $j < $this->n; $j++) {
-		// 		echo $i."->".$j." : ".$this->cost[$i][$j]."<br>";
-		// 		echo gettype($this->cost[$i][$j]);
-		// 	}
-		// }
-		// echo "<br>";
-
 		$this->max_match = 0;
 		for($i = 0; $i < $this->n; $i++) {
 			$this->xy[$i] = -1;
 			$this->yx[$i] = -1;
-		}
-		for($i = 0; $i < $this->n; $i++) {
 			$this->lx[$i] = 0;
 			$this->ly[$i] = 0;
 		}
-		
+
 		for($i = 0; $i < $this->n; $i++) {
 			for($j = 0; $j < $this->n; $j++) {
 				$this->lx[$i] = max($this->lx[$i], $this->cost[$i][$j]);
@@ -67,7 +55,6 @@ class Hungarian {
 
 
 	private function updateLabels() {
-		// echo "inside update labels";
 		$x = 0;
 		$y = 0;
 		$delta = INFINITY; //init delta as infinity
