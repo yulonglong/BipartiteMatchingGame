@@ -2,21 +2,24 @@ function setContextRed() {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
 	ctx.lineWidth = 3;
-	ctx.strokeStyle = '#ff0000';
+	ctx.strokeStyle = '#ff4d4d';
+	ctx.fillStyle = '#990000';
 }
 
 function setContextBlue() {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
 	ctx.lineWidth = 4;
-	ctx.strokeStyle = '#0000ff';
+	ctx.strokeStyle = '#6666ff';
+	ctx.fillStyle = '#000099';
 }
 
 function setContextDefault() {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
 	ctx.lineWidth = 1;
-	ctx.strokeStyle = '#220000';
+	ctx.strokeStyle = '#333333';
+	ctx.fillStyle = '#0d0d0d';
 }
 
 // static
@@ -46,7 +49,7 @@ function drawStraightLine(l,r, weight) {
 
 	ctx.font="20px Roboto";
 	if (window.innerWidth <= 480) ctx.font="15px Roboto";
-	ctx.fillText("s" + weight,x,y);
+	ctx.fillText(weight,x,y);
 }
 
 // static 
@@ -79,7 +82,7 @@ function drawBezierCurve(l,r, weight) {
 
 	ctx.font="20px Roboto";
 	if (window.innerWidth <= 480) ctx.font="15px Roboto";
-	ctx.fillText("b" + weight,x,y-yOffset);
+	ctx.fillText(weight,x,y-yOffset);
 }
 
 // static
