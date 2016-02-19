@@ -1,8 +1,15 @@
 function setContextRed() {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
-	ctx.lineWidth = 4;
+	ctx.lineWidth = 3;
 	ctx.strokeStyle = '#ff0000';
+}
+
+function setContextBlue() {
+	var c=document.getElementById("cvs");
+	var ctx=c.getContext("2d");
+	ctx.lineWidth = 4;
+	ctx.strokeStyle = '#0000ff';
 }
 
 function setContextDefault() {
@@ -76,7 +83,7 @@ function drawBezierCurve(l,r, weight) {
 }
 
 // static
-function drawLine(lineArr, weightArr, selectedEdgeArr, nLeft, nRight) {
+function drawLine(lineArr, weightArr, selectedEdgeArr, correctEdgeArr, nLeft, nRight) {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
 	ctx.clearRect(0, 0, c.width, c.height);
@@ -86,17 +93,46 @@ function drawLine(lineArr, weightArr, selectedEdgeArr, nLeft, nRight) {
 	for(var i=0;i<nLeft;i++) {
 		for(var j=0;j<nRight;j++) {
 			if (lineArr[i][j]) {
-				if (selectedEdgeArr[i][j]) setContextRed();
 				if (Math.abs(i-j) <= 1) {
 					drawStraightLine(i, j, weightArr[i][j]);
 				}
 				else {
 					drawBezierCurve(i, j, weightArr[i][j]);
 				}
-				setContextDefault();
 			}
 		}
 	}
+
+	setContextRed();
+	for(var i=0;i<nLeft;i++) {
+		for(var j=0;j<nRight;j++) {
+			if (selectedEdgeArr[i][j]) {
+				if (Math.abs(i-j) <= 1) {
+					drawStraightLine(i, j, weightArr[i][j]);
+				}
+				else {
+					drawBezierCurve(i, j, weightArr[i][j]);
+				}
+			}
+		}
+	}
+
+	setContextBlue();
+
+	for(var i=0;i<nLeft;i++) {
+		for(var j=0;j<nRight;j++) {
+			if (correctEdgeArr[i][j]) {
+				if (Math.abs(i-j) <= 1) {
+					drawStraightLine(i, j, weightArr[i][j]);
+				}
+				else {
+					drawBezierCurve(i, j, weightArr[i][j]);
+				}
+			}
+		}
+	}
+
+	setContextDefault();
 }
 
 // static
