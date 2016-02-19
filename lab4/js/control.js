@@ -15,8 +15,8 @@ var selectedEdgeArray = [[false,false]];
 var correctEdgeArray = [[false,false]];
 var totalScore = 0;
 var totalPair = 0;
-var graphJson;
-var solvedGraphArray;
+var graphJson = "";
+var solvedGraphArray = [];
 
 initializeArray();
 generateWorksheet();
@@ -38,8 +38,33 @@ function initializeArray() {
 			correctEdgeArray[i][j] = false;
 		}
 	}
+}
+
+function initialize() {
+	leftSelected = false;
+	rightSelected = false;
+	selectedFilename = "";
+	selectedIndex = -1;
+
+	leftFilename = [];
+	rightFilename = [];
+
+	numberOfImagesLeft = 0;
+	numberOfImagesRight = 0;
+	leftSelected = false;
+	rightSelected = false;
+	selectedFilename = "";
+	selectedIndex = -1;
+	lineArray = [[false,false]];
+	weightArray = [[0,0]];
+	selectedEdgeArray = [[false,false]];
+	correctEdgeArray = [[false,false]];
 	totalScore = 0;
 	totalPair = 0;
+	graphJson = "";
+	solvedGraphArray = [];
+
+	initializeArray();
 }
 
 function generateGraphAJAX(left, right) {
@@ -147,6 +172,8 @@ function generateWorksheet() {
 		$('.msg').html("<p style='color: red;'>Please enter a number between 2 and 10 !</p>");
 		return;
 	}
+	
+	initialize();
 
 	correctImages = 0;
 	numberOfImagesLeft = parseInt(nLeft);
@@ -193,14 +220,7 @@ function generateWorksheet() {
 	// $('#main').show();
 	$('.mainMsg').html('Select an image to start.');
 
-	initializeArray();
 	generateGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
-	// for (var i = 0; i < numberOfImagesLeft; i++) {
-	// 	for (var j = 0; j < numberOfImagesRight; j++) { 
-	// 		lineArray[i][j] = true;
-	// 		weightArray[i][j] = i;
-	// 	}
-	// }
 
 	// Decide on the size of canvas based on the image size
 	var c=document.getElementById("cvs");
