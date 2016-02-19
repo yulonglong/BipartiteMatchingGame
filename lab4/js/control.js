@@ -134,13 +134,13 @@ function solveGraph() {
 	drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
 
 	if (correctPair > totalPair) {
-		$('.msg').append("<br/>More raccoons ("+correctPair+") could eat in the optimal answer.");
+		$('.msg').append("<br/><b style='color: red;'>More raccoons ("+correctPair+") could eat in the optimal answer.</b>");
 	}
 	else if ((correctPair == totalPair) && (correctScore > totalScore)) {
-		$('.msg').append("<br/>More points ("+correctScore+") can be obtained in the optimal answer.");
+		$('.msg').append("<br/><b style='color: red;'>More points ("+correctScore+") can be obtained in the optimal answer.</b>");
 	}
 	else {
-		$('.msg').append("<br/>Congratulations! Your answer is optimal.");
+		$('.msg').append("<br/><b style='color: green;'>Congratulations! Your answer is optimal.</b>");
 	}
 
 	for(var i=0;i<numberOfImagesLeft;i++){
