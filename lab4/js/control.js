@@ -3,6 +3,7 @@ var filename = ["toast1", "toast2", "toast3", "toast4", "toast5", "toast6", "toa
 var leftFilename = [];
 var rightFilename = [];
 
+var isSolved = false;
 var numberOfImagesLeft = 0;
 var numberOfImagesRight = 0;
 var leftSelected = false;
@@ -41,14 +42,10 @@ function initializeArray() {
 }
 
 function initialize() {
-	leftSelected = false;
-	rightSelected = false;
-	selectedFilename = "";
-	selectedIndex = -1;
-
 	leftFilename = [];
 	rightFilename = [];
 
+	isSolved = false;
 	numberOfImagesLeft = 0;
 	numberOfImagesRight = 0;
 	leftSelected = false;
@@ -99,6 +96,8 @@ function generateGraphAJAX(left, right) {
 }
 
 function solveGraphAJAX() {
+	if (isSolved) return;
+
 	var xmlhttp;
 	if (window.XMLHttpRequest) {
 		// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -121,6 +120,8 @@ function solveGraphAJAX() {
 }
 
 function solveGraph() {
+	isSolved = true;
+	
 	var correctPair = parseInt(solvedGraphArray["num_match"]);
 	var correctScore = parseInt(solvedGraphArray["match_score"]);
 

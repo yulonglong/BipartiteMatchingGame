@@ -1,7 +1,7 @@
 function setContextRed() {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
-	ctx.lineWidth = 3;
+	ctx.lineWidth = 2;
 	ctx.strokeStyle = '#ff4d4d';
 	ctx.fillStyle = '#990000';
 }
@@ -9,7 +9,7 @@ function setContextRed() {
 function setContextBlue() {
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
-	ctx.lineWidth = 4;
+	ctx.lineWidth = 3;
 	ctx.strokeStyle = '#6666ff';
 	ctx.fillStyle = '#000099';
 }
