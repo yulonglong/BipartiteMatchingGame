@@ -5,6 +5,7 @@ var rightFilename = [];
 
 var isSolved = false;
 var isSubmitted = false;
+var username = "Anonymous";
 var numberOfImagesLeft = 0;
 var numberOfImagesRight = 0;
 var graphId = 0;
@@ -52,6 +53,7 @@ function initialize() {
 	isSubmitted = false;
 	$('#submitButton').prop('disabled',false);
 
+	username = "Anonymous";
 	numberOfImagesLeft = 0;
 	numberOfImagesRight = 0;
 	graphId = 0;
@@ -70,6 +72,40 @@ function initialize() {
 
 	initializeArray();
 }
+
+function getHighscoreByIdAJAX(currGraphId) {
+	if (isSolved) return;
+
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else {
+		// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			var highscoreJson = xmlhttp.responseText;
+			// $('.msg').html(highscoreJson);
+			highscoreArray = JSON.parse(highscoreJson);
+			getHighscorePostProcess(highscoreArray, currGraphId);
+		}
+	};
+	// xmlhttp.open("GET","http://cs3226.comp.nus.edu.sg/matching.php?cmd=solve&graph="+graphJson,true);
+	xmlhttp.open("GET","matching.php?cmd=highscore&graph_id="+currGraphId,true);
+	xmlhttp.send();
+}
+
+function getHighscorePostProcess(highscoreArray, currGraphId) {
+	$('#tblDescription').html("Top 10 of all time for Graph ID = "+currGraphId);
+	$('#tblBody').html("");
+	var maxIndex = Math.min(highscoreArray.length, 10);
+	for(var i=0;i<maxIndex;i++) {
+		$('#tblBody').append("<tr>"+"<td>"+(i+1)+"</td>"+"<td>"+highscoreArray[i]["name"]+"</td>"+"<td>"+highscoreArray[i]["num_match"]+"</td>"+"<td>"+highscoreArray[i]["match_score"]+"</td>"+"<td>"+highscoreArray[i]["duration"]+"</td>"+"<td>"+highscoreArray[i]["date"]+"</td>"+"</tr>")
+	}
+}
+
 
 function generateRandomGraphAJAX(left, right) {
 	var xmlhttp;
@@ -187,7 +223,7 @@ function solveGraphByIdAJAX(currGraphId) {
 	xmlhttp.send();
 }
 
-function submitGraphByIdAJAX(currGraphId) {
+function submitGraphByIdAJAX(currGraphId, currUsername) {
 	if (isSubmitted) return;
 
 	var xmlhttp;
@@ -217,8 +253,7 @@ function submitGraphByIdAJAX(currGraphId) {
 		}
 	}
 	// $('.msg').html(JSON.stringify(solution));
-
-	xmlhttp.open("GET","matching.php?cmd=submit&graph_id="+currGraphId+"&solution="+JSON.stringify(solution),true);
+	xmlhttp.open("GET","matching.php?cmd=submit&graph_id="+currGraphId+"&solution="+JSON.stringify(solution)+"&username="+currUsername,true);
 	xmlhttp.send();
 }
 
@@ -303,6 +338,7 @@ function generateWorksheet() {
 	var nLeft = $('#numberOfImagesLeft').val();
 	var nRight = $('#numberOfImagesRight').val();
 	var graphId = $('#graphId').val();
+	var username = $('#username').val();
 
 	if (graphId == 0 && nLeft == null && nRight == null) graphId = 1;
 	if ((graphId != null) && ((graphId < 0) || (graphId > 9))) {
@@ -331,13 +367,16 @@ function generateWorksheet() {
 		generateGraphByIdAJAX(graphId);
 		$("#solveButton").attr("onclick","solveGraphByIdAJAX("+graphId+")");
 		$("#submitButton").prop('disabled',false);
-		$("#submitButton").attr("onclick","submitGraphByIdAJAX("+graphId+")");
+		$("#submitButton").attr("onclick","submitGraphByIdAJAX("+graphId+",\'"+username+"\')");
+		$("#highscoreButton").prop('disabled',false);
+		$("#highscoreButton").attr("onclick","getHighscoreByIdAJAX("+graphId+")");
 		$("#gameMode").html("<b style='color: red;'>Competitive Mode</b>");
 	}
 	else {
 		generateRandomGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
 		$("#solveButton").attr("onclick","solveGraphAJAX()");
 		$("#submitButton").prop('disabled',true);
+		$("#highscoreButton").prop('disabled',true);
 		$("#gameMode").html("Practice Mode");
 	}
 
