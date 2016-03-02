@@ -6,6 +6,7 @@ var rightFilename = [];
 var isSolved = false;
 var numberOfImagesLeft = 0;
 var numberOfImagesRight = 0;
+var graphId = 0;
 var leftSelected = false;
 var rightSelected = false;
 var selectedFilename = "";
@@ -48,6 +49,7 @@ function initialize() {
 	isSolved = false;
 	numberOfImagesLeft = 0;
 	numberOfImagesRight = 0;
+	graphId = 0;
 	leftSelected = false;
 	rightSelected = false;
 	selectedFilename = "";
@@ -88,7 +90,7 @@ function generateRandomGraphAJAX(left, right) {
 				// alert(jsArray["E"][i][0] + " " + jsArray["E"][i][1] + " " + jsArray["E"][i][2]);
 			}
 			// drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
-			$('.msg').html(graphJson);
+			// $('.msg').html(graphJson);
 			numberOfImagesLeft = jsArray["N"];
 			numberOfImagesRight = jsArray["M"];
 			drawWorksheet();
@@ -98,7 +100,7 @@ function generateRandomGraphAJAX(left, right) {
 	xmlhttp.send();
 }
 
-function generateGraphAJAX(graphId) {
+function generateGraphByIdAJAX(currGraphId) {
 	var xmlhttp;
 	if (window.XMLHttpRequest) {
 		// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -128,7 +130,7 @@ function generateGraphAJAX(graphId) {
 			drawWorksheet();
 		}
 	};
-	xmlhttp.open("GET","matching.php?cmd=generate&graph_id="+graphId,true);
+	xmlhttp.open("GET","matching.php?cmd=generate&graph_id="+currGraphId,true);
 	xmlhttp.send();
 }
 
@@ -156,6 +158,51 @@ function solveGraphAJAX() {
 	xmlhttp.send();
 }
 
+function solveGraphByIdAJAX(currGraphId) {
+	if (isSolved) return;
+
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else {
+		// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			var solvedGraphJson = xmlhttp.responseText;
+			// $('.msg').html(solvedGraphJson);
+			solvedGraphArray = JSON.parse(solvedGraphJson);
+			solveGraphShowAnswerOnly();
+		}
+	};
+	// xmlhttp.open("GET","http://cs3226.comp.nus.edu.sg/matching.php?cmd=solve&graph="+graphJson,true);
+	xmlhttp.open("GET","matching.php?cmd=solve&graph_id="+currGraphId,true);
+	xmlhttp.send();
+}
+
+function solveGraphShowAnswerOnly() {
+	isSolved = true;
+
+	var correctPair = parseInt(solvedGraphArray["num_match"]);
+	var correctScore = parseInt(solvedGraphArray["match_score"]);
+	$('.msg').append("<br/><b style='color: green;'>Best answer: "+correctPair+" raccoons could eat with score "+correctScore+" .</b>");
+	
+	for(var i=0;i<numberOfImagesLeft;i++){
+		var currId = "left"+leftFilename[i];
+		$('#'+currId).removeClass("cartoon unselected");
+		$('#'+currId).addClass("cartoonNoHover");
+		$('#'+currId).attr('onClick','');
+	}
+	for(var i=0;i<numberOfImagesRight;i++){
+		var currId = "right"+rightFilename[i];
+		$('#'+currId).removeClass("cartoon unselected");
+		$('#'+currId).addClass("cartoonNoHover");
+		$('#'+currId).attr('onClick','');
+	}
+}
+
 function solveGraph() {
 	isSolved = true;
 	
@@ -168,8 +215,6 @@ function solveGraph() {
 		var rightIndex = solvedGraphArray["match"][i][1];
 		correctEdgeArray[leftIndex][rightIndex] = true;
 	}
-
-	drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
 
 	if (correctPair > totalPair) {
 		$('.msg').append("<br/><b style='color: red;'>More raccoons ("+correctPair+") could eat in the optimal answer.</b>");
@@ -193,6 +238,8 @@ function solveGraph() {
 		$('#'+currId).addClass("cartoonNoHover");
 		$('#'+currId).attr('onClick','');
 	}
+
+	drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
 }
 
 function generateWorksheet() {
@@ -202,9 +249,9 @@ function generateWorksheet() {
 	var nRight = $('#numberOfImagesRight').val();
 	var graphId = $('#graphId').val();
 
-	if (graphId == null && nLeft == null && nRight == null) graphId = 1;
+	if (graphId == 0 && nLeft == null && nRight == null) graphId = 1;
 	if ((graphId != null) && ((graphId < 0) || (graphId > 9))) {
-		$('.msg').html("<p style='color: red;'>Please enter a graph ID between 1 and 9 !</p>");
+		$('.msg').html("<p style='color: red;'>Please enter a graph ID between 1 and 9 (or 0 to disable this option) !</p>");
 		return;
 	}
 
@@ -225,8 +272,14 @@ function generateWorksheet() {
 	numberOfImagesLeft = parseInt(nLeft);
 	numberOfImagesRight = parseInt(nRight);
 
-	if (graphId != null && graphId > 0) generateGraphAJAX(graphId);
-	else generateRandomGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
+	if (graphId != null && graphId > 0) {
+		generateGraphByIdAJAX(graphId);
+		$("#solveButton").attr("onclick","solveGraphByIdAJAX("+graphId+")");
+	}
+	else {
+		generateRandomGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
+		$("#solveButton").attr("onclick","solveGraphAJAX()");
+	}
 
 	startTime = new Date().getTime();
 }
@@ -275,6 +328,7 @@ function drawWorksheet() {
 
 	// Decide on the size of canvas based on the image size
 	var c=document.getElementById("cvs");
+	c.width = c.height = 0;
 	var ctx=c.getContext("2d");
 
 	var oneImgId = oneImgIdRight;

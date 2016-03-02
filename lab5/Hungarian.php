@@ -11,6 +11,9 @@ define("INFINITY", 10000000);
 // echo $h->solve();
 
 class Hungarian {
+	// To keep track of the edges chosen in the answer, set to true to save all edges
+	private $showGraphAnswer = false;
+
 	private $cost = array(); //cost matrix
 	private $n;
 	private $max_match; //n workers and n jobs
@@ -24,7 +27,9 @@ class Hungarian {
 	private $slackx = array(); //slackx[y] such a vertex, that l(slackx[y]) + l(y) - w(slackx[y],y) = slack[y]
 	private $pprev = array(); //array for memorizing alternating paths
 
-	public function __construct($jsonArray) {
+	public function __construct($jsonArray, $_showGraphAnswer = false) {
+		$this->showGraphAnswer = $_showGraphAnswer;
+
 		$phpArray = json_decode($jsonArray, true);
 
 		$this->n = max($phpArray["N"],$phpArray["M"]);
@@ -191,7 +196,7 @@ class Hungarian {
 				$totalMatch++;
 				$totalScore += $currentCost;
 				$edge = array($i, $this->xy[$i]);
-				array_push($answerArray["match"], $edge);
+				if ($this->showGraphAnswer) array_push($answerArray["match"], $edge);
 			}
 			// echo $i."->".$this->xy[$i]." : ".$this->cost[$i][$this->xy[$i]]."<br>";
 		}
