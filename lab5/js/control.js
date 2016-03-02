@@ -334,8 +334,9 @@ function generateWorksheet() {
 	}
 	else {
 		generateRandomGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
+		$("#solveButton").attr("onclick","solveGraphAJAX()");
 		$("#submitButton").prop('disabled',true);
-		$("#gameMode").html("Leisure Mode");
+		$("#gameMode").html("Practice Mode");
 	}
 
 	startTime = new Date().getTime();
