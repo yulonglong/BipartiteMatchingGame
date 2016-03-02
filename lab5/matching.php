@@ -3,6 +3,7 @@ session_start();
 
 require_once("Hungarian.php");
 require_once("Database.php");
+date_default_timezone_set('Asia/Singapore');
 
 // Graph Test case class to store logical test cases
 class GraphTestCase {
