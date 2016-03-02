@@ -226,17 +226,19 @@ function submitGraphPostProcess(feedbackArray) {
 	isSubmitted = true;
 	$('#submitButton').prop('disabled',true);
 
-	$('.msg').html("");
-	$('.msg').append("Current number of match is "+totalPair+" with score "+totalScore);
-	
 	var bestPair = parseInt(feedbackArray["num_match"]);
 	var bestScore = parseInt(feedbackArray["match_score"]);
+	var bestDuration = parseInt(feedbackArray["best_duration"]);
+	var currDuration = parseInt(feedbackArray["duration"]);
+
+	$('.msg').html("");
+	$('.msg').append("Current number of match is "+totalPair+" with score "+totalScore+ " in "+currDuration+" secs.");
 
 	if (feedbackArray["new_best"] == 1) {
 		$('.msg').append("<br/><b style='color: green;'>Congratulations, new highscore!</b>");
 	}
 	else {
-		$('.msg').append("<br/><b>Sorry, the best number of match is "+bestPair+" with score "+bestScore+".</b>");
+		$('.msg').append("<br/><b>Sorry, the best number of match is "+bestPair+" with score "+bestScore+" in "+bestDuration+" secs.</b>");
 	}
 
 	disableWorksheet();

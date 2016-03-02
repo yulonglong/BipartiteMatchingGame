@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once("Hungarian.php");
 require_once("Database.php");
 
@@ -82,6 +84,21 @@ function generateRandomGraph($left, $right) {
 }
 
 function generateGraphById($graphId) {
+	// Check whether competitive session already started
+	if (!isset($_SESSION['start'])) { /* or use !isset */
+		$_SESSION['start'] = 1;
+		$_SESSION['graph_id'] = $graphId;
+		$_SESSION['visittime'] = time();
+	}
+	// if already started, check graph_id, if it's the same graph_id, do not update any session variables
+	else if (isset($_SESSION['graph_id'])) {
+		if ($_SESSION['graph_id'] != $graphId) {
+			$_SESSION['start'] = 1;
+			$_SESSION['graph_id'] = $graphId;
+			$_SESSION['visittime'] = time();
+		}
+	}
+
 	$tc = new GraphTestCase();
 	return $tc->jsonArray[$graphId-1];
 }
@@ -148,22 +165,35 @@ function submitGraph() {
 
 		// echo $totalScore;
 
+
+		if ((isset($_SESSION['start'])) && (isset($_SESSION['graph_id'])) && ($_SESSION['graph_id'] == $graphId)) { /* or use !isset */
+			$_SESSION['start'] = 0;
+			$_SESSION['graph_id'] = 0;
+			$elapsed = time()-$_SESSION['visittime'];
+		}
+		else {
+			echo "Invalid Session, please reset and try again!";
+			return;
+		}
+
+		$highscoreArray = array();
+		$highscoreArray["graph_id"] = $graphId;
+		$highscoreArray["duration"] = $elapsed;
+
 		$database = new Database();
 
 		$stmt = $database->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId)->fetchAll();
 		// echo var_dump($stmt);
 
-		$highscoreArray = array();
-		$highscoreArray["graph_id"] = $graphId;
-
 		// if nobody never played this graph_id yet
 		if (count($stmt) == 0) {
 			$nowFormat = date('Y-m-d H:i:s');
-			$sql = "INSERT INTO score_table (graph_id,num_match,match_score,date) VALUES (?,?,?,?)";
-			$database->pdo->prepare($sql)->execute([$graphId, $numMatch, $totalScore, $nowFormat]);
+			$sql = "INSERT INTO score_table (graph_id,num_match,match_score,duration,date) VALUES (?,?,?,?,?)";
+			$database->pdo->prepare($sql)->execute([$graphId, $numMatch, $totalScore, $elapsed, $nowFormat]);
 
 			$highscoreArray["num_match"] = $numMatch;
 			$highscoreArray["match_score"] = $totalScore;
+			$highscoreArray["best_duration"] = $elapsed;
 			$highscoreArray["new_best"] = 1;
 		}
 		else {
@@ -172,20 +202,23 @@ function submitGraph() {
 
 			$newHighscore = false;
 			if ($numMatch > $stmt[0]["num_match"]) $newHighscore = true;
-			else if ($totalScore > $stmt[0]["match_score"]) $newHighscore = true;
+			else if (($numMatch == $stmt[0]["num_match"]) && ($totalScore > $stmt[0]["match_score"])) $newHighscore = true;
+			else if (($numMatch == $stmt[0]["num_match"]) && ($totalScore == $stmt[0]["match_score"]) && ($elapsed < $stmt[0]["duration"])) $newHighscore = true;
 
 			if ($newHighscore) {
 				$nowFormat = date('Y-m-d H:i:s');
-				$sql = "UPDATE score_table SET num_match = ? , match_score = ? , date = ? WHERE graph_id = ?";
-				$database->pdo->prepare($sql)->execute([$numMatch, $totalScore, $nowFormat, $graphId]);
+				$sql = "UPDATE score_table SET num_match = ? , match_score = ? , duration = ?, date = ? WHERE graph_id = ?";
+				$database->pdo->prepare($sql)->execute([$numMatch, $totalScore, $elapsed, $nowFormat, $graphId]);
 
 				$highscoreArray["num_match"] = $numMatch;
 				$highscoreArray["match_score"] = $totalScore;
+				$highscoreArray["best_duration"] = $elapsed;
 				$highscoreArray["new_best"] = 1;
 			}
 			else {
 				$highscoreArray["num_match"] = $stmt[0]["num_match"];
 				$highscoreArray["match_score"] = $stmt[0]["match_score"];
+				$highscoreArray["best_duration"] = $stmt[0]["duration"];
 				$highscoreArray["new_best"] = 0;
 			}
 		}
