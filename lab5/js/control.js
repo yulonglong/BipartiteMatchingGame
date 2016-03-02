@@ -4,6 +4,7 @@ var leftFilename = [];
 var rightFilename = [];
 
 var isSolved = false;
+var isSubmitted = false;
 var numberOfImagesLeft = 0;
 var numberOfImagesRight = 0;
 var graphId = 0;
@@ -47,6 +48,10 @@ function initialize() {
 	rightFilename = [];
 
 	isSolved = false;
+	$('#solveButton').prop('disabled',false);
+	isSubmitted = false;
+	$('#submitButton').prop('disabled',false);
+
 	numberOfImagesLeft = 0;
 	numberOfImagesRight = 0;
 	graphId = 0;
@@ -182,25 +187,70 @@ function solveGraphByIdAJAX(currGraphId) {
 	xmlhttp.send();
 }
 
+function submitGraphByIdAJAX(currGraphId) {
+	if (isSubmitted) return;
+
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else {
+		// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			var feedbackJson = xmlhttp.responseText;
+			$('.msg').html(feedbackJson);
+			feedbackArray = JSON.parse(feedbackJson);
+			submitGraphPostProcess(feedbackArray);	
+		}
+	};
+
+	// Convert selected edges to JSON string
+	solution = new Array();
+	for(var i=0;i<numberOfImagesLeft;i++){
+		for(var j=0;j<numberOfImagesRight;j++) {
+			if (selectedEdgeArray[i][j]) {
+				solution.push(new Array(i,j));
+			}
+		}
+	}
+	// $('.msg').html(JSON.stringify(solution));
+
+	xmlhttp.open("GET","matching.php?cmd=submit&graph_id="+currGraphId+"&solution="+JSON.stringify(solution),true);
+	xmlhttp.send();
+}
+
+function submitGraphPostProcess(feedbackArray) {
+	isSubmitted = true;
+	$('#submitButton').prop('disabled',true);
+
+	$('.msg').html("");
+	$('.msg').append("Current number of match is "+totalPair+" with score "+totalScore);
+	
+	var bestPair = parseInt(feedbackArray["num_match"]);
+	var bestScore = parseInt(feedbackArray["match_score"]);
+
+	if (feedbackArray["new_best"] == 1) {
+		$('.msg').append("<br/><b style='color: green;'>Congratulations, new highscore!</b>");
+	}
+	else {
+		$('.msg').append("<br/><b>Sorry, the best number of match is "+bestPair+" with score "+bestScore+".</b>");
+	}
+
+	disableWorksheet();
+}
+
 function solveGraphShowAnswerOnly() {
 	isSolved = true;
+	$('#solveButton').prop('disabled',true);
 
 	var correctPair = parseInt(solvedGraphArray["num_match"]);
 	var correctScore = parseInt(solvedGraphArray["match_score"]);
-	$('.msg').append("<br/><b style='color: green;'>Best answer: "+correctPair+" raccoons could eat with score "+correctScore+" .</b>");
+	$('.msg').append("<br/><b style='color: blue;'>Optimal answer: "+correctPair+" raccoons could eat with score "+correctScore+" .</b>");
 	
-	for(var i=0;i<numberOfImagesLeft;i++){
-		var currId = "left"+leftFilename[i];
-		$('#'+currId).removeClass("cartoon unselected");
-		$('#'+currId).addClass("cartoonNoHover");
-		$('#'+currId).attr('onClick','');
-	}
-	for(var i=0;i<numberOfImagesRight;i++){
-		var currId = "right"+rightFilename[i];
-		$('#'+currId).removeClass("cartoon unselected");
-		$('#'+currId).addClass("cartoonNoHover");
-		$('#'+currId).attr('onClick','');
-	}
+	disableWorksheet();
 }
 
 function solveGraph() {
@@ -226,6 +276,11 @@ function solveGraph() {
 		$('.msg').append("<br/><b style='color: green;'>Congratulations! Your answer is optimal.</b>");
 	}
 
+	disableWorksheet();
+	drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
+}
+
+function disableWorksheet() {
 	for(var i=0;i<numberOfImagesLeft;i++){
 		var currId = "left"+leftFilename[i];
 		$('#'+currId).removeClass("cartoon unselected");
@@ -238,8 +293,6 @@ function solveGraph() {
 		$('#'+currId).addClass("cartoonNoHover");
 		$('#'+currId).attr('onClick','');
 	}
-
-	drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
 }
 
 function generateWorksheet() {
@@ -275,11 +328,13 @@ function generateWorksheet() {
 	if (graphId != null && graphId > 0) {
 		generateGraphByIdAJAX(graphId);
 		$("#solveButton").attr("onclick","solveGraphByIdAJAX("+graphId+")");
+		$("#submitButton").prop('disabled',false);
+		$("#submitButton").attr("onclick","submitGraphByIdAJAX("+graphId+")");
 		$("#gameMode").html("<b style='color: red;'>Competitive Mode</b>");
 	}
 	else {
 		generateRandomGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
-		$("#solveButton").attr("onclick","solveGraphAJAX()");
+		$("#submitButton").prop('disabled',true);
 		$("#gameMode").html("Leisure Mode");
 	}
 

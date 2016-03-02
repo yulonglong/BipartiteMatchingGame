@@ -1,6 +1,8 @@
 <?php
 require_once("Hungarian.php");
+require_once("Database.php");
 
+// Graph Test case class to store logical test cases
 class GraphTestCase {
 	public $jsonArray = array(
 		'{"N":2,"M":2,"E":[[0,0,1],[0,1,1],[1,0,1]]}',
@@ -19,6 +21,8 @@ class GraphTestCase {
 };
 
 
+
+
 if (!isset($_GET["cmd"])) {
 	echo "Please specify command!";
 	return;
@@ -26,12 +30,9 @@ if (!isset($_GET["cmd"])) {
 
 $cmd = $_GET["cmd"];
 
-if ($cmd == "generate") {
-	generateGraph();
-}
-else if ($cmd = "solve") {
-	solveGraph();
-}
+if ($cmd == "generate") generateGraph();
+else if ($cmd == "solve") solveGraph();
+else if ($cmd == "submit") submitGraph();
 else {
 	echo "Sorry, command is not supported!";
 	return;
@@ -89,6 +90,11 @@ function generateGraphById($graphId) {
 function solveGraph() {
 	if (isset($_GET["graph_id"])) {
 		$graphId = $_GET["graph_id"];
+		if (($graphId < 1) || ($graphId > 9)) {
+			echo "invalid graph ID!";
+			return;
+		}
+
 		$tc = new GraphTestCase();
 		$currGraphJson = $tc->jsonArray[$graphId-1];
 		$h = new Hungarian($currGraphJson, false);
@@ -100,6 +106,94 @@ function solveGraph() {
 	}
 	else {
 		echo "Please specify the current graph!";
+		return;
+	}
+}
+
+function submitGraph() {
+	if ((isset($_GET["graph_id"])) &&  (isset($_GET["solution"]))) {
+		$graphId = $_GET["graph_id"];
+		if (($graphId < 1) || ($graphId > 9)) {
+			echo "invalid graph ID!";
+			return;
+		}
+
+		$tc = new GraphTestCase();
+		$currGraphJson = $tc->jsonArray[$graphId-1];
+		$currGraph = json_decode($currGraphJson, true);
+
+		$solutionArray = json_decode($_GET["solution"], true);
+		// echo var_dump($solutionArray);
+
+		$totalScore = 0;
+		$numMatch = count($solutionArray);
+
+		foreach ($solutionArray as $solutionEdge) {
+			$solutionLeft = $solutionEdge[0];
+			$solutionRight = $solutionEdge[1];
+			$valid = false;
+			foreach ($currGraph["E"] as $edge) {
+				$left = $edge[0];
+				$right = $edge[1];
+				if (($solutionLeft == $left) && ($solutionRight == $right)) {
+					$totalScore = $totalScore + $edge[2];
+					$valid = true;
+				}
+			}
+			if (!$valid) {
+				echo "edge (".$solutionLeft.",".$solutionRight.") is invalid!";
+				return;
+			}
+		}
+
+		// echo $totalScore;
+
+		$database = new Database();
+
+		$stmt = $database->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId)->fetchAll();
+		// echo var_dump($stmt);
+
+		$highscoreArray = array();
+		$highscoreArray["graph_id"] = $graphId;
+
+		// if nobody never played this graph_id yet
+		if (count($stmt) == 0) {
+			$nowFormat = date('Y-m-d H:i:s');
+			$sql = "INSERT INTO score_table (graph_id,num_match,match_score,date) VALUES (?,?,?,?)";
+			$database->pdo->prepare($sql)->execute([$graphId, $numMatch, $totalScore, $nowFormat]);
+
+			$highscoreArray["num_match"] = $numMatch;
+			$highscoreArray["match_score"] = $totalScore;
+			$highscoreArray["new_best"] = 1;
+		}
+		else {
+			// echo $numMatch." -- ".$stmt[0]["num_match"]."<br>";
+			// echo $totalScore." -- ".$stmt[0]["match_score"]."<br>";
+
+			$newHighscore = false;
+			if ($numMatch > $stmt[0]["num_match"]) $newHighscore = true;
+			else if ($totalScore > $stmt[0]["match_score"]) $newHighscore = true;
+
+			if ($newHighscore) {
+				$nowFormat = date('Y-m-d H:i:s');
+				$sql = "UPDATE score_table SET num_match = ? , match_score = ? , date = ? WHERE graph_id = ?";
+				$database->pdo->prepare($sql)->execute([$numMatch, $totalScore, $nowFormat, $graphId]);
+
+				$highscoreArray["num_match"] = $numMatch;
+				$highscoreArray["match_score"] = $totalScore;
+				$highscoreArray["new_best"] = 1;
+			}
+			else {
+				$highscoreArray["num_match"] = $stmt[0]["num_match"];
+				$highscoreArray["match_score"] = $stmt[0]["match_score"];
+				$highscoreArray["new_best"] = 0;
+			}
+		}
+		echo json_encode($highscoreArray);
+
+	}
+	else {
+		echo "Wrong parameters for solution submission!";
 		return;
 	}
 }
