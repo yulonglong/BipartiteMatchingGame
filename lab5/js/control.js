@@ -64,7 +64,7 @@ function initialize() {
 	initializeArray();
 }
 
-function generateGraphAJAX(left, right) {
+function generateRandomGraphAJAX(left, right) {
 	var xmlhttp;
 	if (window.XMLHttpRequest) {
 		// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -87,11 +87,48 @@ function generateGraphAJAX(left, right) {
 				weightArray[leftIndex][rightIndex] = weight;
 				// alert(jsArray["E"][i][0] + " " + jsArray["E"][i][1] + " " + jsArray["E"][i][2]);
 			}
-			drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
-			// $('.msg').html(graphJson);
+			// drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
+			$('.msg').html(graphJson);
+			numberOfImagesLeft = jsArray["N"];
+			numberOfImagesRight = jsArray["M"];
+			drawWorksheet();
 		}
 	};
 	xmlhttp.open("GET","matching.php?cmd=generate&N="+left+"&M="+right,true);
+	xmlhttp.send();
+}
+
+function generateGraphAJAX(graphId) {
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else {
+		// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			graphJson = xmlhttp.responseText;
+			var jsArray = JSON.parse(graphJson);
+
+			var arrayLength = jsArray["E"].length;
+			for (var i = 0; i < arrayLength; i++) {
+				var leftIndex = jsArray["E"][i][0];
+				var rightIndex = jsArray["E"][i][1];
+				var weight = jsArray["E"][i][2];
+				lineArray[leftIndex][rightIndex] = true;
+				weightArray[leftIndex][rightIndex] = weight;
+				// alert(jsArray["E"][i][0] + " " + jsArray["E"][i][1] + " " + jsArray["E"][i][2]);
+			}
+			// drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
+			// $('.msg').html(graphJson);
+			numberOfImagesLeft = jsArray["N"];
+			numberOfImagesRight = jsArray["M"];
+			drawWorksheet();
+		}
+	};
+	xmlhttp.open("GET","matching.php?cmd=generate&graph_id="+graphId,true);
 	xmlhttp.send();
 }
 
@@ -162,17 +199,24 @@ function generateWorksheet() {
 	$('.msg').html("");
 	
 	var nLeft = $('#numberOfImagesLeft').val();
-	if (nLeft == null) nLeft = 4;
-	if ((nLeft < 2) || (nLeft > 10)) {
-		$('.msg').html("<p style='color: red;'>Please enter a number between 2 and 10 !</p>");
+	var nRight = $('#numberOfImagesRight').val();
+	var graphId = $('#graphId').val();
+
+	if (graphId == null && nLeft == null && nRight == null) graphId = 1;
+	if ((graphId != null) && ((graphId < 0) || (graphId > 9))) {
+		$('.msg').html("<p style='color: red;'>Please enter a graph ID between 1 and 9 !</p>");
 		return;
 	}
 
-	var nRight = $('#numberOfImagesRight').val();
-	if (nRight == null) nRight = 4;
-	if ((nRight < 2) || (nRight > 10)) {
-		$('.msg').html("<p style='color: red;'>Please enter a number between 2 and 10 !</p>");
-		return;
+	if (graphId == 0) {
+		if ((nLeft == null) || (nLeft < 2) || (nLeft > 10)) {
+			$('.msg').html("<p style='color: red;'>Please enter a left number between 2 and 10 !</p>");
+			return;
+		}
+		if ((nLeft == null) || (nRight < 2) || (nRight > 10)) {
+			$('.msg').html("<p style='color: red;'>Please enter a right number between 2 and 10 !</p>");
+			return;
+		}
 	}
 	
 	initialize();
@@ -181,6 +225,13 @@ function generateWorksheet() {
 	numberOfImagesLeft = parseInt(nLeft);
 	numberOfImagesRight = parseInt(nRight);
 
+	if (graphId != null && graphId > 0) generateGraphAJAX(graphId);
+	else generateRandomGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
+
+	startTime = new Date().getTime();
+}
+
+function drawWorksheet() {
 	$('#ulLeft').empty();
 	$('#ulRight').empty();
 
@@ -222,8 +273,6 @@ function generateWorksheet() {
 	// $('#main').show();
 	$('.mainMsg').html('Feed as many raccoons as possible and get the highest score.');
 
-	generateGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
-
 	// Decide on the size of canvas based on the image size
 	var c=document.getElementById("cvs");
 	var ctx=c.getContext("2d");
@@ -243,8 +292,6 @@ function generateWorksheet() {
 	// end canvas size setting
 
 	drawLine(lineArray, weightArray, selectedEdgeArray, correctEdgeArray, numberOfImagesLeft, numberOfImagesRight);
-
-	startTime = new Date().getTime();
 }
 
 
