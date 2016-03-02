@@ -275,10 +275,12 @@ function generateWorksheet() {
 	if (graphId != null && graphId > 0) {
 		generateGraphByIdAJAX(graphId);
 		$("#solveButton").attr("onclick","solveGraphByIdAJAX("+graphId+")");
+		$("#gameMode").html("<b style='color: red;'>Competitive Mode</b>");
 	}
 	else {
 		generateRandomGraphAJAX(numberOfImagesLeft, numberOfImagesRight);
 		$("#solveButton").attr("onclick","solveGraphAJAX()");
+		$("#gameMode").html("Leisure Mode");
 	}
 
 	startTime = new Date().getTime();
