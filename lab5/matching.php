@@ -182,13 +182,13 @@ function submitGraph() {
 
 		$database = new Database();
 
-		$stmt = $database->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId)->fetchAll();
+		$stmt = $database->pdo->query('SELECT * FROM highscore_table WHERE graph_id = '.$graphId)->fetchAll();
 		// echo var_dump($stmt);
 
 		// if nobody never played this graph_id yet
 		if (count($stmt) == 0) {
 			$nowFormat = date('Y-m-d H:i:s');
-			$sql = "INSERT INTO score_table (graph_id,num_match,match_score,duration,date) VALUES (?,?,?,?,?)";
+			$sql = "INSERT INTO highscore_table (graph_id,num_match,match_score,duration,date) VALUES (?,?,?,?,?)";
 			$database->pdo->prepare($sql)->execute([$graphId, $numMatch, $totalScore, $elapsed, $nowFormat]);
 
 			$highscoreArray["num_match"] = $numMatch;
@@ -207,7 +207,7 @@ function submitGraph() {
 
 			if ($newHighscore) {
 				$nowFormat = date('Y-m-d H:i:s');
-				$sql = "UPDATE score_table SET num_match = ? , match_score = ? , duration = ?, date = ? WHERE graph_id = ?";
+				$sql = "UPDATE highscore_table SET num_match = ? , match_score = ? , duration = ?, date = ? WHERE graph_id = ?";
 				$database->pdo->prepare($sql)->execute([$numMatch, $totalScore, $elapsed, $nowFormat, $graphId]);
 
 				$highscoreArray["num_match"] = $numMatch;
