@@ -36,8 +36,12 @@
 				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Reset</button>
 				<button id="solveButton" type="button" class="btn btn-info btn-lg">Solve</button>
 				<button id="submitButton" type="button" class="btn btn-info btn-lg">Submit</button>
+			</div>
+			<br>
+			<div class="container center">
 				<button id="highscoreButton" type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#highscoreModal">High Score</button>
-
+			</div>
+			<div class="container center">
 				<!-- Modal -->
 				<div class="modal fade" id="myModal" role="dialog">
 					<div class="modal-dialog modal-sm">
@@ -57,7 +61,7 @@
 								</p>
 								<br>
 								<p>
-									<span>Name (shown in leaderboard) </span><input type="text" class="form-control" value="Anonymous" id="username">
+									<span>Name (shown in leaderboard) </span><input type="text" maxlength="9" class="form-control" value="Anonymous" id="username">
 								</p>
 								<p>
 									<span>Competitive : Graph ID (0 to disable): </span><input type="number" class="form-control" min="1" max="9" value="1" id="graphId">
@@ -86,12 +90,12 @@
 								<table class="table table-striped" id="tblGrid">
 									<thead id="tblHead">
 										<tr>
-											<th class="text-center">Rank</th>
+											<th class="text-center hidden-xs">Rank</th>
 											<th class="text-center">Name</th>
 											<th class="text-center">Matches</th>
 											<th class="text-center">Score</th>
 											<th class="text-center">Duration (secs)</th>
-											<th class="text-center">Timestamp (SGT)</th>
+											<th class="text-center hidden-xs">Timestamp (SGT)</th>
 										</tr>
 									</thead>
 									<tbody id="tblBody">

@@ -102,7 +102,7 @@ function getHighscorePostProcess(highscoreArray, currGraphId) {
 	$('#tblBody').html("");
 	var maxIndex = Math.min(highscoreArray.length, 10);
 	for(var i=0;i<maxIndex;i++) {
-		$('#tblBody').append("<tr>"+"<td>"+(i+1)+"</td>"+"<td>"+highscoreArray[i]["name"]+"</td>"+"<td>"+highscoreArray[i]["num_match"]+"</td>"+"<td>"+highscoreArray[i]["match_score"]+"</td>"+"<td>"+highscoreArray[i]["duration"]+"</td>"+"<td>"+highscoreArray[i]["date"]+"</td>"+"</tr>")
+		$('#tblBody').append("<tr>"+"<td class=\"hidden-xs\">"+(i+1)+"</td>"+"<td>"+highscoreArray[i]["name"]+"</td>"+"<td>"+highscoreArray[i]["num_match"]+"</td>"+"<td>"+highscoreArray[i]["match_score"]+"</td>"+"<td>"+highscoreArray[i]["duration"]+"</td>"+"<td class=\"hidden-xs\">"+highscoreArray[i]["date"]+"</td>"+"</tr>")
 	}
 }
 
