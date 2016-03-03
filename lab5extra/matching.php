@@ -190,12 +190,12 @@ function submitGraph() {
 		$stmt = $database->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId.' ORDER BY num_match DESC, match_score DESC, duration LIMIT 10')->fetchAll();
 		// echo var_dump($stmt);
 
+		$nowFormat = date('Y-m-d H:i:s');
+		$sql = "INSERT INTO score_table (graph_id,name,num_match,match_score,duration,date) VALUES (?,?,?,?,?,?)";
+		$database->pdo->prepare($sql)->execute([$graphId, $username, $numMatch, $totalScore, $elapsed, $nowFormat]);
+
 		// if nobody never played this graph_id yet
 		if (count($stmt) == 0) {
-			$nowFormat = date('Y-m-d H:i:s');
-			$sql = "INSERT INTO score_table (graph_id,name,num_match,match_score,duration,date) VALUES (?,?,?,?,?,?)";
-			$database->pdo->prepare($sql)->execute([$graphId, $username, $numMatch, $totalScore, $elapsed, $nowFormat]);
-
 			$highscoreArray["num_match"] = $numMatch;
 			$highscoreArray["match_score"] = $totalScore;
 			$highscoreArray["best_duration"] = $elapsed;
@@ -222,14 +222,8 @@ function submitGraph() {
 				$highscoreArray["best_duration"] = $stmt[0]["duration"];
 				$highscoreArray["new_best"] = 0;
 			}
-
-			$nowFormat = date('Y-m-d H:i:s');
-			$sql = "INSERT INTO score_table (graph_id,name,num_match,match_score,duration,date) VALUES (?,?,?,?,?,?)";
-			$database->pdo->prepare($sql)->execute([$graphId, $username, $numMatch, $totalScore, $elapsed, $nowFormat]);
-
 		}
 		echo json_encode($highscoreArray);
-
 	}
 	else {
 		echo "Wrong parameters for solution submission!";
