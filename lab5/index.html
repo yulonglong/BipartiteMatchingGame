@@ -36,7 +36,12 @@
 				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Reset</button>
 				<button id="solveButton" type="button" class="btn btn-info btn-lg">Solve</button>
 				<button id="submitButton" type="button" class="btn btn-info btn-lg">Submit</button>
-
+			</div>
+			<br>
+			<div class="container center">
+				<button id="highscoreButton" type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#highscoreModal">High Score</button>
+			</div>
+			<div class="container center">
 				<!-- Modal -->
 				<div class="modal fade" id="myModal" role="dialog">
 					<div class="modal-dialog modal-sm">
@@ -54,6 +59,10 @@
 								<p>
 									<span>Practice : Right (0 to disable): </span><input type="number" class="form-control" min="2" max="10" value="0" id="numberOfImagesRight">
 								</p>
+								<br>
+								<p>
+									<span>Name (shown in leaderboard) </span><input type="text" maxlength="9" class="form-control" value="Anonymous" id="username">
+								</p>
 								<p>
 									<span>Competitive : Graph ID (0 to disable): </span><input type="number" class="form-control" min="1" max="9" value="1" id="graphId">
 								</p>
@@ -61,6 +70,37 @@
 							<div class="modal-footer">
 								<button type="button" class="btn btn-primary" id="btn" onclick="generateWorksheet();" data-dismiss="modal">Generate Worksheet</button>
 								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal -->
+				<div class="modal fade" id="highscoreModal" role="dialog">
+					<div class="modal-dialog">
+
+					<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">Leaderboard</h4>
+							</div>
+							<div class="modal-body">
+								<h5 class="text-center" id="tblDescription"></h5>
+								<table class="table table-striped" id="tblGrid">
+									<thead id="tblHead">
+										<tr>
+											<th class="text-center hidden-xs">Rank</th>
+											<th class="text-center">Name</th>
+											<th class="text-center">Matches</th>
+											<th class="text-center">Score</th>
+											<th class="text-center">Duration (secs)</th>
+											<th class="text-center hidden-xs">Timestamp (SGT)</th>
+										</tr>
+									</thead>
+									<tbody id="tblBody">
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>

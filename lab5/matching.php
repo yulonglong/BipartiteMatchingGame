@@ -36,6 +36,7 @@ $cmd = $_GET["cmd"];
 if ($cmd == "generate") generateGraph();
 else if ($cmd == "solve") solveGraph();
 else if ($cmd == "submit") submitGraph();
+else if ($cmd == "highscore") getHighscore();
 else {
 	echo "Sorry, command is not supported!";
 	return;
@@ -136,6 +137,9 @@ function submitGraph() {
 			return;
 		}
 
+		$username = "Anonymous";
+		if (isset($_GET["username"])) $username = $_GET["username"];
+
 		$tc = new GraphTestCase();
 		$currGraphJson = $tc->jsonArray[$graphId-1];
 		$currGraph = json_decode($currGraphJson, true);
@@ -183,15 +187,15 @@ function submitGraph() {
 
 		$database = new Database();
 
-		$stmt = $database->pdo->query('SELECT * FROM highscore_table WHERE graph_id = '.$graphId)->fetchAll();
+		$stmt = $database->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId.' ORDER BY num_match DESC, match_score DESC, duration LIMIT 10')->fetchAll();
 		// echo var_dump($stmt);
+
+		$nowFormat = date('Y-m-d H:i:s');
+		$sql = "INSERT INTO score_table (graph_id,name,num_match,match_score,duration,date) VALUES (?,?,?,?,?,?)";
+		$database->pdo->prepare($sql)->execute([$graphId, $username, $numMatch, $totalScore, $elapsed, $nowFormat]);
 
 		// if nobody never played this graph_id yet
 		if (count($stmt) == 0) {
-			$nowFormat = date('Y-m-d H:i:s');
-			$sql = "INSERT INTO highscore_table (graph_id,num_match,match_score,duration,date) VALUES (?,?,?,?,?)";
-			$database->pdo->prepare($sql)->execute([$graphId, $numMatch, $totalScore, $elapsed, $nowFormat]);
-
 			$highscoreArray["num_match"] = $numMatch;
 			$highscoreArray["match_score"] = $totalScore;
 			$highscoreArray["best_duration"] = $elapsed;
@@ -207,10 +211,6 @@ function submitGraph() {
 			else if (($numMatch == $stmt[0]["num_match"]) && ($totalScore == $stmt[0]["match_score"]) && ($elapsed < $stmt[0]["duration"])) $newHighscore = true;
 
 			if ($newHighscore) {
-				$nowFormat = date('Y-m-d H:i:s');
-				$sql = "UPDATE highscore_table SET num_match = ? , match_score = ? , duration = ?, date = ? WHERE graph_id = ?";
-				$database->pdo->prepare($sql)->execute([$numMatch, $totalScore, $elapsed, $nowFormat, $graphId]);
-
 				$highscoreArray["num_match"] = $numMatch;
 				$highscoreArray["match_score"] = $totalScore;
 				$highscoreArray["best_duration"] = $elapsed;
@@ -224,10 +224,26 @@ function submitGraph() {
 			}
 		}
 		echo json_encode($highscoreArray);
-
 	}
 	else {
 		echo "Wrong parameters for solution submission!";
+		return;
+	}
+}
+
+function getHighscore() {
+	if (isset($_GET["graph_id"])) {
+		$graphId = $_GET["graph_id"];
+		if (($graphId < 1) || ($graphId > 9)) {
+			echo "invalid graph ID!";
+			return;
+		}
+		$database = new Database();
+		$stmt = $database->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId.' ORDER BY num_match DESC, match_score DESC, duration LIMIT 10')->fetchAll();
+		echo json_encode($stmt);
+	}
+	else {
+		echo "Wrong parameters for get highscore!";
 		return;
 	}
 }
