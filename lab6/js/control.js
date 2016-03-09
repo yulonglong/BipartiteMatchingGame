@@ -73,38 +73,6 @@ function initialize() {
 	initializeArray();
 }
 
-function getHighscoreByIdAJAX(currGraphId) {
-	var xmlhttp;
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-	} else {
-		// code for IE6, IE5
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			var highscoreJson = xmlhttp.responseText;
-			// $('.msg').html(highscoreJson);
-			highscoreArray = JSON.parse(highscoreJson);
-			getHighscorePostProcess(highscoreArray, currGraphId);
-		}
-	};
-	// xmlhttp.open("GET","http://cs3226.comp.nus.edu.sg/matching.php?cmd=solve&graph="+graphJson,true);
-	xmlhttp.open("GET","matching.php?cmd=highscore&graph_id="+currGraphId,true);
-	xmlhttp.send();
-}
-
-function getHighscorePostProcess(highscoreArray, currGraphId) {
-	$('#tblDescription').html("Top 10 of all time for Graph ID = "+currGraphId);
-	$('#tblBody').html("");
-	var maxIndex = Math.min(highscoreArray.length, 10);
-	for(var i=0;i<maxIndex;i++) {
-		$('#tblBody').append("<tr>"+"<td class=\"hidden-xs\">"+(i+1)+"</td>"+"<td>"+highscoreArray[i]["name"]+"</td>"+"<td>"+highscoreArray[i]["num_match"]+"</td>"+"<td>"+highscoreArray[i]["match_score"]+"</td>"+"<td>"+highscoreArray[i]["duration"]+"</td>"+"<td class=\"hidden-xs\">"+highscoreArray[i]["date"]+"</td>"+"</tr>")
-	}
-}
-
-
 function generateRandomGraphAJAX(left, right) {
 	var xmlhttp;
 	if (window.XMLHttpRequest) {
@@ -336,7 +304,10 @@ function generateWorksheet() {
 	var nLeft = $('#numberOfImagesLeft').val();
 	var nRight = $('#numberOfImagesRight').val();
 	var graphId = $('#graphId').val();
-	var username = $('#username').val();
+	var username = $('#username').html();
+
+	var usernameExists = document.getElementById("username");
+	if (!usernameExists) username = "";
 
 	if (graphId == 0 && nLeft == null && nRight == null) graphId = 1;
 	if ((graphId != null) && ((graphId < 0) || (graphId > 9))) {

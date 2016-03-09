@@ -1,27 +1,67 @@
 <?php
 session_start();
-if (!isset($_SESSION["user_id"])) {
-	header('Location: login.php');
-}
-else {
+$user_id = null;
+$role = null;
+if (isset($_SESSION["user_id"])) {
 	$user_id = $_SESSION["user_id"];
+	$role = $_SESSION["role"];
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Lab 6 - Matching Game</title>
-		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
-
-		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
-		
+		<title>Lab 6 - Bipartite Matching Game</title>
+		<?php include "inc/section_head.php"; ?>
 	</head>
 	<body>
-		<h1>Matching Game</h1>
+		<?php include "inc/section_highscoreModal.php"; ?>
+		<nav class="navbar navbar-inverse navbar-static-top">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="index.php">Bipartite Matching</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="index.php">Main<span class="sr-only">(current)</span></a></li>
+						<li><a href="admin.php">Admin Page</a></li>
+					</ul>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input id="highscoreGraphId" type="number" class="form-control" placeholder="ID"  min="1" max="9">
+							<button type="button" class="btn btn-success" data-toggle="modal" data-target="#highscoreModal" onclick="getHighscoreByIdAJAX(-1);">High Score</button>
+						</div>
+					</form>
+
+					<ul class="nav navbar-nav navbar-right">
+						<?php
+							if ($user_id != null) {
+								echo "<li><a>Welcome, <span id='username'>".$user_id."</span></a></li>";
+							}
+						?>
+						<li><a href="login.php">
+							<?php
+								if ($user_id != null) echo "Logout";
+								else echo "Login";
+							?>
+						</a></li>
+					</ul>
+				</div><!-- /.navbar-collapse -->
+			</div>
+		</nav>
+		
+		<div class="container">
+			<h1>Bipartite Matching Game</h1>
+		</div>
 
 		<section id="main">
 			<h3 id="gameMode"></h3>
@@ -71,7 +111,7 @@ else {
 								</p>
 								<br>
 								<p>
-									<span>Name (shown in leaderboard) </span><input type="text" maxlength="9" class="form-control" value="Anonymous" id="username">
+									<span>Only logged-in user submission will be saved and shown in leaderboard </span>
 								</p>
 								<p>
 									<span>Competitive : Graph ID (0 to disable): </span><input type="number" class="form-control" min="1" max="9" value="1" id="graphId">
@@ -80,37 +120,6 @@ else {
 							<div class="modal-footer">
 								<button type="button" class="btn btn-primary" id="btn" onclick="generateWorksheet();" data-dismiss="modal">Generate Worksheet</button>
 								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Modal -->
-				<div class="modal fade" id="highscoreModal" role="dialog">
-					<div class="modal-dialog">
-
-					<!-- Modal content-->
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">Leaderboard</h4>
-							</div>
-							<div class="modal-body">
-								<h5 class="text-center" id="tblDescription"></h5>
-								<table class="table table-striped" id="tblGrid">
-									<thead id="tblHead">
-										<tr>
-											<th class="text-center hidden-xs">Rank</th>
-											<th class="text-center">Name</th>
-											<th class="text-center">Matches</th>
-											<th class="text-center">Score</th>
-											<th class="text-center">Duration (secs)</th>
-											<th class="text-center hidden-xs">Timestamp (SGT)</th>
-										</tr>
-									</thead>
-									<tbody id="tblBody">
-									</tbody>
-								</table>
 							</div>
 						</div>
 					</div>
@@ -125,9 +134,6 @@ else {
 
 		
 	</body>
-
-	<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
-	<script src="js/helper.js"></script>
+	<?php include("inc/section_bottom.php"); ?>
 	<script src="js/control.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
 </html>
