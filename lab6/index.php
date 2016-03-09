@@ -48,7 +48,7 @@ if (isset($_SESSION["user_id"])) {
 								echo "<li><a>Welcome, <span id='username'>".$user_id."</span></a></li>";
 							}
 						?>
-						<li><a href="login.php">
+						<li><a href="logout.php">
 							<?php
 								if ($user_id != null) echo "Logout";
 								else echo "Login";
@@ -58,7 +58,7 @@ if (isset($_SESSION["user_id"])) {
 				</div><!-- /.navbar-collapse -->
 			</div>
 		</nav>
-		
+
 		<div class="container">
 			<h1>Bipartite Matching Game</h1>
 		</div>

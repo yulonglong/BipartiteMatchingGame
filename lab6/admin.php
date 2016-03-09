@@ -51,7 +51,7 @@ require_once("Database.php");
 							echo "<li><a>Welcome, <span id='username'>".$user_id."</span></a></li>";
 						}
 					?>
-					<li><a href="login.php">
+					<li><a href="logout.php">
 						<?php
 							if ($user_id != null) echo "Logout";
 							else echo "Login";
