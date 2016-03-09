@@ -13,7 +13,7 @@ require_once("Database.php");
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Bipartite Game - Administrator Page</title>
+	<title>Bipartite Matching Game - Administrator Page</title>
 	<?php include "inc/section_head.php"; ?>
 </head>
 
@@ -63,7 +63,7 @@ require_once("Database.php");
 	</nav>
 
 	<div class="container">
-		<h1>Bipartite Game - Administrator Page</h1>
+		<h1>Administrator Page</h1>
 	</div>
 	<br>
 
@@ -71,8 +71,9 @@ require_once("Database.php");
 
 	<!-- Main -->
 	<div class="container center">
-		<h3>User List</h3>
-		<table class="table " id="tblGrid">
+		<br>
+		<h2>User List</h2>
+		<table class="table table-striped" id="tblGrid">
 			<thead>
 				<tr>
 					<th class="text-center">User</th>
@@ -89,19 +90,17 @@ require_once("Database.php");
 				?>
 			</tbody>
 		</table>
-
-		<h3>Best Score List</h3>
-		<table class="table " id="tblGrid">
+		<br>
+		<h2>Best Score List</h2>
+		<table class="table table-striped" id="tblGrid">
 			<thead>
 				<tr>
-					<tr>
-						<th class="text-center">Graph ID</th>
-						<th class="text-center">Name</th>
-						<th class="text-center">Matches</th>
-						<th class="text-center">Score</th>
-						<th class="text-center">Duration (secs)</th>
-						<th class="text-center">Timestamp (SGT)</th>
-					</tr>
+					<th class="text-center">Graph ID</th>
+					<th class="text-center">Name</th>
+					<th class="text-center">Matches</th>
+					<th class="text-center">Score</th>
+					<th class="text-center">Duration (secs)</th>
+					<th class="text-center">Timestamp (SGT)</th>
 				</tr>
 			</thead>
 			<tbody>

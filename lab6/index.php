@@ -11,7 +11,7 @@ if (isset($_SESSION["user_id"])) {
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Lab 6 - Bipartite Matching Game</title>
+		<title>Bipartite Matching Game</title>
 		<?php include "inc/section_head.php"; ?>
 	</head>
 	<body>

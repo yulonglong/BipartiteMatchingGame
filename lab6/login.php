@@ -12,7 +12,7 @@ require_once("Database.php");
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Bipartite Game - Login</title>
+	<title>Bipartite Matching Game - Login</title>
 	<?php include "inc/section_head.php"; ?>
 </head>
 
@@ -86,7 +86,7 @@ require_once("Database.php");
 	</nav>
 
 	<div class="container">
-		<h1>Bipartite Game - Login</h1>
+		<h1>Login Page</h1>
 	</div>
 	<br>
 
