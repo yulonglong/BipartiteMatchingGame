@@ -1,7 +1,5 @@
 <?php
 session_start();
-require_once("Database.php");
-
 if (!isset($_SESSION["user_id"])) {
 	header('Location: login.php');
 }
@@ -9,6 +7,9 @@ else {
 	$user_id = $_SESSION["user_id"];
 	$role = $_SESSION["role"];
 }
+
+require_once("Database.php");
+
 if (isset($_GET["reset"])) {
 	if ($_GET["reset"] == true) {
 		$database = new Database();

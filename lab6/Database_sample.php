@@ -18,6 +18,11 @@ class Database {
 		$this->pdo = new PDO($dsn, $user, $pass, $opt);
 	}
 
+	public function __destruct() {
+		// close connection
+		$this->pdo = null;
+	}
+
 	public function login($user_id, $password) {
 		$stmt = $this->pdo->query('SELECT * FROM user WHERE user_id = "'.$user_id.'"')->fetchAll();
 		if (count($stmt) != 1) return -1;
