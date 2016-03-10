@@ -38,6 +38,15 @@ class Database {
 		return $stmt[0];
 	}
 
+	public function resetHighScore($user_id) {
+		$stmt = $this->pdo->query('SELECT * FROM user WHERE user_id = "'.$user_id.'"')->fetchAll();
+		if (count($stmt) != 1) return false;
+		if ($stmt[0]["role"] != 0) return false;
+
+		$sql = "TRUNCATE TABLE score_table";
+		$this->pdo->prepare($sql)->execute();
+	}
+
 	public function registerUser($username, $email, $password, $confirm_password, &$feedback) {
 		if ($password != $confirm_password) {
 			$feedback = "Passwords do not match!";

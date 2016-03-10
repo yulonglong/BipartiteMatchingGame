@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once("Database.php");
+
 if (!isset($_SESSION["user_id"])) {
 	header('Location: login.php');
 }
@@ -7,7 +9,13 @@ else {
 	$user_id = $_SESSION["user_id"];
 	$role = $_SESSION["role"];
 }
-require_once("Database.php");
+if (isset($_GET["reset"])) {
+	if ($_GET["reset"] == true) {
+		$database = new Database();
+		$database->resetHighScore($_SESSION["user_id"]);
+	}
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -130,6 +138,32 @@ require_once("Database.php");
 				?>
 			</tbody>
 		</table>
+	</div>
+	<div class="container center">
+		<!-- Trigger the modal with a button -->
+		<button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#resetModal">Clear Highscore</button>
+	</div>
+	<div class="container center">
+		<!-- Modal -->
+		<div class="modal fade" id="resetModal" role="dialog">
+			<div class="modal-dialog modal-sm">
+
+			<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Clear Highscore</h4>
+					</div>
+					<div class="modal-body">
+						<h5 class="text-center">Are you sure?</h5>
+					</div>
+					<div class="modal-footer">
+						<a href="admin.php?reset=true" class="btn btn-success">Yes</a>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<?php } else { ?>
