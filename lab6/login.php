@@ -6,7 +6,6 @@ if (isset($_SESSION["user_id"])) {
 	$user_id = $_SESSION["user_id"];
 	$role = $_SESSION["role"];
 }
-require_once("Database.php");
 ?>
 
 <!DOCTYPE html>
@@ -93,8 +92,8 @@ require_once("Database.php");
 	<!-- Main -->
 	<?php
 		if (isset($_POST["user_id"]) && isset($_POST["password"])) {
+			require_once("Database.php");
 			$database = new Database();
-
 			$user_id = $_POST["user_id"];
 			$password = $_POST["password"];
 			$role = $database->login($user_id,$password);
@@ -102,6 +101,7 @@ require_once("Database.php");
 				$_SESSION["user_id"] = $user_id;
 				$_SESSION["role"] = $role;
 				header('Location: index.php');
+				return;
 			}
 			else {
 				showLoginForm();

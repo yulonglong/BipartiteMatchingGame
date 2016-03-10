@@ -1,17 +1,20 @@
 <?php
 session_start();
+$user_id = null;
+$role = null;
 if (!isset($_SESSION["user_id"])) {
 	header('Location: login.php');
+	return;
 }
 else {
 	$user_id = $_SESSION["user_id"];
 	$role = $_SESSION["role"];
 }
 
-require_once("Database.php");
 $database = null;
+if ($role == 0) require_once("Database.php");
 
-if (isset($_GET["reset"])) {
+if (isset($_GET["reset"]) && ($role == 0)) {
 	if ($_GET["reset"] == true) {
 		$database = new Database();
 		$database->resetHighScore($_SESSION["user_id"]);
