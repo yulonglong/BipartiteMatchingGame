@@ -177,14 +177,12 @@ function submitGraph() {
 
 		$database = new Database();
 
-		$stmt = $database->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId.' ORDER BY num_match DESC, match_score DESC, duration LIMIT 10')->fetchAll();
+		$stmt = $database->getTop10Score($graphId);
 		// echo var_dump($stmt);
 
 		// Only submit if the username is not empty
 		if (strlen($username) > 0) {
-			$nowFormat = date('Y-m-d H:i:s');
-			$sql = "INSERT INTO score_table (graph_id,name,num_match,match_score,duration,date) VALUES (?,?,?,?,?,?)";
-			$database->pdo->prepare($sql)->execute([$graphId, $username, $numMatch, $totalScore, $elapsed, $nowFormat]);
+			$database->submitScore($graphId, $username, $numMatch, $totalScore, $elapsed);
 		}
 
 		// if nobody never played this graph_id yet
@@ -232,7 +230,7 @@ function getHighscore() {
 			return;
 		}
 		$database = new Database();
-		$stmt = $database->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId.' ORDER BY num_match DESC, match_score DESC, duration LIMIT 10')->fetchAll();
+		$stmt = $database->getTop10Score($graphId);
 		echo json_encode($stmt);
 	}
 	else {

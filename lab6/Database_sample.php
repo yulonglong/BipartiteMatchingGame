@@ -1,6 +1,7 @@
 <?php 
 class Database {
-	public $pdo = null;
+	private $pdo = null;
+	private $queryTimeElapsed = 0;
 
 	public function __construct() {
 		$host = '127.0.0.1';
@@ -32,6 +33,12 @@ class Database {
 		return -1;
 	}
 
+	public function submitScore($graphId, $username, $numMatch, $totalScore, $elapsed) {
+		$nowFormat = date('Y-m-d H:i:s');
+		$sql = "INSERT INTO score_table (graph_id,name,num_match,match_score,duration,date) VALUES (?,?,?,?,?,?)";
+		$this->pdo->prepare($sql)->execute([$graphId, $username, $numMatch, $totalScore, $elapsed, $nowFormat]);
+	}
+
 	public function getAllUsers() {
 		$stmt = $this->pdo->query('SELECT * FROM user ORDER BY user_id')->fetchAll();
 		return $stmt;
@@ -41,6 +48,11 @@ class Database {
 		$stmt = $this->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId.' ORDER BY num_match DESC, match_score DESC, duration LIMIT 1')->fetchAll();
 		if (count($stmt) == 0) return null;
 		return $stmt[0];
+	}
+
+	public function getTop10Score($graphId) {
+		$stmt = $this->pdo->query('SELECT * FROM score_table WHERE graph_id = '.$graphId.' ORDER BY num_match DESC, match_score DESC, duration LIMIT 10')->fetchAll();
+		return $stmt;
 	}
 
 	public function resetHighScore($user_id) {
