@@ -92,9 +92,9 @@ require_once("Database.php");
 
 	<!-- Main -->
 	<?php
-		$database = new Database();
-		
 		if (isset($_POST["user_id"]) && isset($_POST["password"])) {
+			$database = new Database();
+
 			$user_id = $_POST["user_id"];
 			$password = $_POST["password"];
 			$role = $database->login($user_id,$password);

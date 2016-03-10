@@ -9,10 +9,11 @@ else {
 }
 
 require_once("Database.php");
-$database = new Database();
+$database = null;
 
 if (isset($_GET["reset"])) {
 	if ($_GET["reset"] == true) {
+		$database = new Database();
 		$database->resetHighScore($_SESSION["user_id"]);
 	}
 }
@@ -76,7 +77,10 @@ if (isset($_GET["reset"])) {
 	</div>
 	<br>
 
-	<?php if ($role == 0) { ?>
+	<?php
+	if ($role == 0) { 
+		if ($database == null) $database = new Database();
+	?>
 
 	<!-- Main -->
 	<div class="container center">
