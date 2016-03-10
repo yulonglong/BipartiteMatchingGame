@@ -35,7 +35,7 @@ require_once("Database.php");
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="index.php">Main<span class="sr-only">(current)</span></a></li>
+					<li><a href="index.php">Main</a></li>
 					<li class="active"><a href="admin.php">Admin Page<span class="sr-only">(current)</span></a></li>
 				</ul>
 				<form class="navbar-form navbar-left" role="search">
@@ -73,7 +73,7 @@ require_once("Database.php");
 	<div class="container center">
 		<br>
 		<h2>User List</h2>
-		<table class="table table-striped" id="tblGrid">
+		<table class="table table-striped table-admin" id="tblGrid">
 			<thead>
 				<tr>
 					<th class="text-center">User</th>
@@ -92,7 +92,7 @@ require_once("Database.php");
 		</table>
 		<br>
 		<h2>Best Score List</h2>
-		<table class="table table-striped" id="tblGrid">
+		<table class="table table-striped table-admin" id="tblGrid">
 			<thead>
 				<tr>
 					<th class="text-center">Graph ID</th>

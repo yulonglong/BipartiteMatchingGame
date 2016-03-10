@@ -19,23 +19,23 @@ require_once("Database.php");
 <?php
 	function showLoginForm() {
 		?>
-		<div class="container">
-			<div class="col-sm-6 col-md-4 col-md-offset-4">
-				<form method="post" action="">
+		<div class="container text-center">
+			<form class="form-horizontal" method="post" action="">
+				<fieldset>
 					<label for="user_id" class="sr-only">User ID</label>
 					<input type="text" id="user_id" name="user_id" class="form-control" placeholder="User ID" required autofocus>
 					<label for="password" class="sr-only">Password</label>
 					<input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
 					<br>
-					<button class="btn btn-lg btn-primary btn-block" type="submit" name="login" id="login" value="login">Log in</button>
-				</form>
-				<br>
-				<p><a href="#" class="text-center new-account">Create an account </a></p>
-				<br>
-				<p class="error_message" id="login_error"></p>
-				<br>
-			</div> <!-- /container -->
-		</div>
+					<button class="btn btn-primary btn-block" type="submit" name="login" id="login" value="login">Log in</button>
+				</fieldset>
+			</form>
+			<br>
+			<p><a href="register.php" class="text-center new-account">Create an account </a></p>
+			<br>
+			<p class="error_message" id="login_error"></p>
+			<br>
+		</div> <!-- /container -->
 		<?php
 	}
 ?>
@@ -58,7 +58,7 @@ require_once("Database.php");
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="index.php">Main<span class="sr-only">(current)</span></a></li>
+					<li><a href="index.php">Main</a></li>
 					<li><a href="admin.php">Admin Page</a></li>
 				</ul>
 				<form class="navbar-form navbar-left" role="search">
@@ -85,42 +85,39 @@ require_once("Database.php");
 		</div>
 	</nav>
 
-	<div class="container">
+	<div class="container text-center">
 		<h1>Login Page</h1>
 	</div>
 	<br>
 
 	<!-- Main -->
-	<div class="container center">
-			<?php
-				$database = new Database();
-				
-				if (isset($_POST["user_id"]) && isset($_POST["password"])) {
-					$user_id = $_POST["user_id"];
-					$password = $_POST["password"];
-					$role = $database->login($user_id,$password);
-					if ($role != -1) {
-						$_SESSION["user_id"] = $user_id;
-						$_SESSION["role"] = $role;
-						header('Location: index.php');
-					}
-					else {
-						showLoginForm();
-						?>
-						<script>
-							document.getElementById("login_error").innerHTML = "Invalid User ID or Password";
-						</script>
-						<?php
-					}
-				}
-				else {
-					// remove all session variables
-					session_unset(); 
-					// destroy the session 
-					session_destroy(); 
-					showLoginForm();
-				}
-		?>
-	</div>
+	<?php
+		$database = new Database();
+		
+		if (isset($_POST["user_id"]) && isset($_POST["password"])) {
+			$user_id = $_POST["user_id"];
+			$password = $_POST["password"];
+			$role = $database->login($user_id,$password);
+			if ($role != -1) {
+				$_SESSION["user_id"] = $user_id;
+				$_SESSION["role"] = $role;
+				header('Location: index.php');
+			}
+			else {
+				showLoginForm();
+				?>
+				<script>
+					document.getElementById("login_error").innerHTML = "<b style='color:red;'>Invalid User ID or Password</b>";
+				</script>
+				<?php
+			}
+		}
+		else {
+			session_unset(); 
+			session_destroy(); 
+			showLoginForm();
+		}
+	?>
 </body>
+<?php include("inc/section_bottom.php"); ?>
 </html>
