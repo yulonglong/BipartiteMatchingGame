@@ -37,5 +37,28 @@ class Database {
 		if (count($stmt) == 0) return null;
 		return $stmt[0];
 	}
+
+	public function registerUser($username, $email, $password, $confirm_password, &$feedback) {
+		if ($password != $confirm_password) {
+			$feedback = "Passwords do not match!";
+			return false;
+		}
+		if (strlen($password) < 4) {
+			$feedback = "Passwords must be at least 4 characters!";
+			return false;
+		}
+
+		$stmt = $this->pdo->query('SELECT * FROM user WHERE user_id = "'.$username.'"')->fetchAll();
+		if (count($stmt) > 0) {
+			$feedback = "Username is already taken!";
+			return false;
+		}
+
+		$sql = "INSERT INTO user (user_id,hashed_password,role,email) VALUES (?,?,?,?)";
+		$this->pdo->prepare($sql)->execute([$username, crypt($password), 1, $email]);
+		$feedback = "Registration Successful!";
+		return true;
+	}
+
 };
 ?>

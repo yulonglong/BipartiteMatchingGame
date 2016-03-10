@@ -84,7 +84,7 @@ if (isset($_SESSION["user_id"])) {
 			<div class="container center">
 				<!-- Trigger the modal with a button -->
 				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Reset</button>
-				<button id="solveButton" type="button" class="btn btn-info btn-lg">Solve</button>
+				<button id="solveButton" type="button" class="btn btn-info btn-lg">Hint</button>
 				<button id="submitButton" type="button" class="btn btn-info btn-lg">Submit</button>
 			</div>
 			<br>
