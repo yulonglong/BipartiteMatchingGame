@@ -28,3 +28,5 @@
 		</div>
 	</div>
 </div>
+
+<script src="js/globalControl.js"></script>
