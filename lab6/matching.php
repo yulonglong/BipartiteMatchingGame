@@ -87,19 +87,9 @@ function generateRandomGraph($left, $right) {
 
 function generateGraphById($graphId) {
 	// Check whether competitive session already started
-	if (!isset($_SESSION['start'])) { /* or use !isset */
-		$_SESSION['start'] = 1;
-		$_SESSION['graph_id'] = $graphId;
-		$_SESSION['visittime'] = time();
-	}
-	// if already started, check graph_id, if it's the same graph_id, do not update any session variables
-	else if (isset($_SESSION['graph_id'])) {
-		if ($_SESSION['graph_id'] != $graphId) {
-			$_SESSION['start'] = 1;
-			$_SESSION['graph_id'] = $graphId;
-			$_SESSION['visittime'] = time();
-		}
-	}
+	$_SESSION['start'] = 1;
+	$_SESSION['graph_id'] = $graphId;
+	$_SESSION['visittime'] = time();
 
 	$tc = new GraphTestCase();
 	return $tc->jsonArray[$graphId-1];

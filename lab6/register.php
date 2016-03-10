@@ -35,7 +35,7 @@ require_once("Database.php");
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li><a href="index.php">Main</a></li>
-					<li><a href="admin.php">Admin Page</a></li>
+					<li><a href="admin.php">Admin</a></li>
 				</ul>
 				<form class="navbar-form navbar-left" role="search">
 					<div class="form-group">
@@ -62,7 +62,7 @@ require_once("Database.php");
 	</nav>
 
 	<div class="container">
-		<h1>Registration Page</h1>
+		<h1>Registration</h1>
 	</div>
 	<br>
 

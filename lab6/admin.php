@@ -21,7 +21,7 @@ if (isset($_GET["reset"])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Bipartite Matching Game - Administrator Page</title>
+	<title>Bipartite Matching Game - Administrator</title>
 	<?php include "inc/section_head.php"; ?>
 </head>
 
@@ -44,7 +44,7 @@ if (isset($_GET["reset"])) {
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li><a href="index.php">Main</a></li>
-					<li class="active"><a href="admin.php">Admin Page<span class="sr-only">(current)</span></a></li>
+					<li class="active"><a href="admin.php">Admin<span class="sr-only">(current)</span></a></li>
 				</ul>
 				<form class="navbar-form navbar-left" role="search">
 					<div class="form-group">
@@ -71,7 +71,7 @@ if (isset($_GET["reset"])) {
 	</nav>
 
 	<div class="container">
-		<h1>Administrator Page</h1>
+		<h1>Administrator</h1>
 	</div>
 	<br>
 
@@ -80,7 +80,7 @@ if (isset($_GET["reset"])) {
 	<!-- Main -->
 	<div class="container center">
 		<br>
-		<h2>User List</h2>
+		<h2>Registered Users</h2>
 		<table class="table table-striped table-admin" id="tblGrid">
 			<thead>
 				<tr>
@@ -99,7 +99,7 @@ if (isset($_GET["reset"])) {
 			</tbody>
 		</table>
 		<br>
-		<h2>Best Score List</h2>
+		<h2>Leaderboard</h2>
 		<table class="table table-striped table-admin" id="tblGrid">
 			<thead>
 				<tr>
