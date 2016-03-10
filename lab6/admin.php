@@ -9,10 +9,10 @@ else {
 }
 
 require_once("Database.php");
+$database = new Database();
 
 if (isset($_GET["reset"])) {
 	if ($_GET["reset"] == true) {
-		$database = new Database();
 		$database->resetHighScore($_SESSION["user_id"]);
 	}
 }
@@ -91,7 +91,6 @@ if (isset($_GET["reset"])) {
 			</thead>
 			<tbody>
 				<?php
-					$database = new Database();
 					$users = $database->getAllUsers();
 					for($i=0;$i<count($users);$i++) {
 						echo '<tr><td class="text-center">'.$users[$i]["user_id"].'</td><td class="text-center">'.$users[$i]["role"].'</td>';
@@ -115,7 +114,6 @@ if (isset($_GET["reset"])) {
 			<tbody>
 				<?php
 					for($i=1;$i<=9;$i++) {
-						$database = new Database();
 						$score = $database->getBestScore($i);
 						if ($score != null) {
 							echo '<tr>'.
