@@ -28,16 +28,20 @@ class Database {
 		return $this->queryTimeElapsed;
 	}
 
-	public function login($user_id, $password) {
+	public function login($user_id, $password, &$feedback) {
 		$start = microtime(true);
 			$stmt = $this->pdo->query('SELECT * FROM user WHERE user_id = "'.$user_id.'"')->fetchAll();
 		$end = microtime(true);
 		$this->queryTimeElapsed += $end-$start;
 
-		if (count($stmt) != 1) return -1;
+		if (count($stmt) != 1) {
+			$feedback = "User ID not found";
+			return -1;
+		}
 		if ($stmt[0]["hashed_password"] == crypt($password, $stmt[0]["hashed_password"])) {
 			return $stmt[0]["role"];
 		}
+		$feedback = "Wrong password";
 		return -1;
 	}
 

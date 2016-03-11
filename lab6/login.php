@@ -16,7 +16,7 @@ if (isset($_SESSION["user_id"])) {
 </head>
 
 <?php
-	function showLoginForm() {
+	function showLoginForm($feedback_message = "") {
 		?>
 		<div class="container text-center">
 			<form class="form-horizontal" method="post" action="">
@@ -32,7 +32,7 @@ if (isset($_SESSION["user_id"])) {
 			<br>
 			<p><a href="register.php" class="text-center new-account">Create an account </a></p>
 			<br>
-			<p class="error_message" id="login_error"></p>
+			<p class="error_message" id="login_error"><b style="color : red;"><?php echo $feedback_message; ?></b></p>
 			<br>
 		</div> <!-- /container -->
 		<?php
@@ -96,20 +96,17 @@ if (isset($_SESSION["user_id"])) {
 			$database = new Database();
 			$user_id = $_POST["user_id"];
 			$password = $_POST["password"];
-			$role = $database->login($user_id,$password);
+			$feedback = "";
+			$role = $database->login($user_id,$password,$feedback);
 			if ($role != -1) {
 				$_SESSION["user_id"] = $user_id;
 				$_SESSION["role"] = $role;
-				header('Location: index.php');
+				if ($role == 0) header('Location: admin.php');
+				else header('Location: index.php');
 				return;
 			}
 			else {
-				showLoginForm();
-				?>
-				<script>
-					document.getElementById("login_error").innerHTML = "<b style='color:red;'>Invalid User ID or Password</b>";
-				</script>
-				<?php
+				showLoginForm($feedback);
 			}
 		}
 		else {
