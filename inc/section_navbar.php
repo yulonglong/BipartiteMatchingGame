@@ -39,7 +39,6 @@ function getBodyNavbar($currentPage, $user_id) {
 					</form>
 
 					<ul class="nav navbar-nav navbar-right">';
-						
 						if ($user_id != null) {
 							echo "<li><a>Welcome, <span id=\'username\'>".$user_id."</span></a></li>";
 						}

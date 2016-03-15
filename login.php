@@ -61,10 +61,16 @@ if (isset($_SESSION["user_id"])) {
 			$feedback = "";
 			$role = $database->login($user_id,$password,$feedback);
 			if ($role != -1) {
+				echo '<p><b style="color: green;">Login Successful</b></p>';
+				echo '<p>Please wait while you are being redirected...</p>';
 				$_SESSION["user_id"] = $user_id;
 				$_SESSION["role"] = $role;
-				if ($role == 0) header('Location: admin.php');
-				else header('Location: index.php');
+				if ($role == 0) {
+					echo "<script type=\"text/javascript\">window.location.href = 'admin.php';</script>";
+				}
+				else{
+					echo "<script type=\"text/javascript\">window.location.href = 'index.php';</script>";
+				}
 				return;
 			}
 			else {
