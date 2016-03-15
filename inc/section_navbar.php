@@ -40,7 +40,7 @@ function getBodyNavbar($currentPage, $user_id) {
 
 					<ul class="nav navbar-nav navbar-right">';
 						if ($user_id != null) {
-							echo "<li><a>Welcome, <span id=\'username\'>".$user_id."</span></a></li>";
+							echo '<li><a>Welcome, <span id="username">'.$user_id.'</span></a></li>';
 						}
 						
 						if ($currentPage == "login") {
