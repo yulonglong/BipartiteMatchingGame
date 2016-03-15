@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto">
 
 <link rel="shortcut icon" href="favicon.png" >
+<meta property="og:image" content="img/thumbnail.png"/>
 
 <?php
 include("inc/analyticstrackinggoogle.php");
