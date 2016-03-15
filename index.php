@@ -94,7 +94,9 @@ if (isset($_SESSION["user_id"])) {
 			<p>Toasts designed by <a href="https://yulonglong.com">Steven Kester Y</a></p>
 		</section>
 
-		
+		<div class="container center">
+			<div class="fb-like" data-href="https://game.yulonglong.com" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+		</div>
 	</body>
 	<?php include("inc/section_bottom.php"); ?>
 	<script src="js/control.js"></script>
