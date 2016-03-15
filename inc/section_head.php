@@ -10,7 +10,7 @@
 <meta property="og:url"           content="http://game.yulonglong.com" />
 <meta property="og:type"          content="website" />
 <meta property="og:title"         content="Bipartite Matching Game" />
-<meta property="og:description"   content="Algorithmic Game, Bipartite Matching with highscore and leaderboard." />
+<meta property="og:description"   content="Algorithmic Game, Bipartite Matching Game with highscore and leaderboard." />
 <meta property="og:image"         content="http://game.yulonglong.com/img/thumbnail.png" />
 
 <?php
