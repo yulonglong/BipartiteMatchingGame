@@ -4,10 +4,10 @@
 <div class="container text-center">
 	<br>
 	<p><?php 
-	if (isset($database) && $database != null) {
-		echo "Total time taken for SQL queries : ";
-		echo $database->getElapsedTime();
-		echo " secs";
-	}
+	// if (isset($database) && $database != null) {
+	// 	echo "Total time taken for SQL queries : ";
+	// 	echo $database->getElapsedTime();
+	// 	echo " secs";
+	// }
 	?></p>
 </div>
