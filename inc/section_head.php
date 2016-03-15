@@ -6,7 +6,12 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto">
 
 <link rel="shortcut icon" href="favicon.png" >
-<meta property="og:image" content="img/thumbnail.png"/>
+
+<meta property="og:url"           content="http://game.yulonglong.com" />
+<meta property="og:type"          content="website" />
+<meta property="og:title"         content="Bipartite Matching Game" />
+<meta property="og:description"   content="Algorithmic Game, Bipartite Matching with highscore and leaderboard." />
+<meta property="og:image"         content="http://game.yulonglong.com/img/thumbnail.png" />
 
 <?php
 include("inc/analyticstrackinggoogle.php");
