@@ -5,7 +5,7 @@ class Database {
 
 	public function __construct() {
 		$host = '127.0.0.1';
-		$db   = 'score_database';
+		$db   = 'bipartite_matching_game';
 		$user = 'root';
 		$pass = '';
 		$charset = 'utf8';
