@@ -17,16 +17,16 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `score_database`
+-- Database: `bipartite_matching_game`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bipartite_matching_game`
+-- Table structure for table `score_table`
 --
 
-CREATE TABLE `bipartite_matching_game` (
+CREATE TABLE `score_table` (
   `ID` int(11) NOT NULL,
   `graph_id` int(11) NOT NULL,
   `name` varchar(30) NOT NULL,
@@ -37,10 +37,10 @@ CREATE TABLE `bipartite_matching_game` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `bipartite_matching_game`
+-- Dumping data for table `score_table`
 --
 
-INSERT INTO `bipartite_matching_game` (`ID`, `graph_id`, `name`, `num_match`, `match_score`, `duration`, `date`) VALUES
+INSERT INTO `score_table` (`ID`, `graph_id`, `name`, `num_match`, `match_score`, `duration`, `date`) VALUES
 (1, 1, 'john', 1, 1, 1620, '2016-03-02 20:30:29'),
 (2, 1, 'john', 1, 1, 2, '2016-03-02 20:30:35'),
 (3, 1, 'john', 1, 1, 2, '2016-03-02 20:30:41'),
@@ -152,9 +152,9 @@ INSERT INTO `user` (`user_id`, `hashed_password`, `role`, `email`) VALUES
 --
 
 --
--- Indexes for table `bipartite_matching_game`
+-- Indexes for table `score_table`
 --
-ALTER TABLE `bipartite_matching_game`
+ALTER TABLE `score_table`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -168,9 +168,9 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT for table `bipartite_matching_game`
+-- AUTO_INCREMENT for table `score_table`
 --
-ALTER TABLE `bipartite_matching_game`
+ALTER TABLE `score_table`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=554;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
