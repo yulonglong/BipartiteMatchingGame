@@ -95,7 +95,7 @@ if (isset($_SESSION["user_id"])) {
 		</section>
 
 		<div class="container center">
-			<div class="fb-like" data-href="https://game.yulonglong.com" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+			<div class="fb-like" data-href="http://game.yulonglong.com" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
 		</div>
 	</body>
 	<?php include("inc/section_bottom.php"); ?>

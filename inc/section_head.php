@@ -6,11 +6,11 @@
 
 <link rel="shortcut icon" href="favicon.png" >
 
-<meta property="og:url"           content="https://game.yulonglong.com" />
+<meta property="og:url"           content="http://game.yulonglong.com" />
 <meta property="og:type"          content="website" />
 <meta property="og:title"         content="Bipartite Matching Game" />
 <meta property="og:description"   content="An algorithmic Game, Weighted Bipartite Matching, with highscore and leaderboard." />
-<meta property="og:image"         content="https://game.yulonglong.com/img/thumbnail.png" />
+<meta property="og:image"         content="http://game.yulonglong.com/img/thumbnail.png" />
 <meta property="fb:app_id"        content="1684204031859960" />
 
 <?php
